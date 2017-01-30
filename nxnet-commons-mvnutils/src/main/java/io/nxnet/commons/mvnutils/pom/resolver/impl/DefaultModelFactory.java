@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.io.File;
 
@@ -11,10 +11,10 @@ import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest.RepositoryMerging;
 import org.eclipse.aether.RequestTrace;
 
-import hr.ericsson.m2mse.testutils.pom.resolver.ModelException;
-import hr.ericsson.m2mse.testutils.pom.resolver.ModelFactory;
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContext;
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContextFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ModelException;
+import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContextFactory;
 
 public class DefaultModelFactory implements ModelFactory
 {   

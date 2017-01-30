@@ -1,12 +1,12 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest.RepositoryMerging;
 import org.apache.maven.project.ProjectModelResolver;
 import org.eclipse.aether.RequestTrace;
 
-import hr.ericsson.m2mse.testutils.pom.resolver.ModelResolverBuilder;
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.ModelResolverBuilder;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
 
 public final class DefaultModelResolverBuilder implements ModelResolverBuilder
 {

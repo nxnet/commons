@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver;
+package io.nxnet.commons.mvnutils.pom.resolver;
 
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest.RepositoryMerging;

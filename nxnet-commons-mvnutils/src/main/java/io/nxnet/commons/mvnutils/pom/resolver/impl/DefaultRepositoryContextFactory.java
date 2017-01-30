@@ -1,10 +1,10 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import org.eclipse.aether.examples.util.Booter;
 import org.eclipse.aether.internal.impl.DefaultRemoteRepositoryManager;
 
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContext;
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContextFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContextFactory;
 
 public class DefaultRepositoryContextFactory implements RepositoryContextFactory
 {

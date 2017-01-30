@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.eclipse.aether.impl.RemoteRepositoryManager;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
 
-import hr.ericsson.m2mse.testutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
 
 public class DefaultRepositoryContext implements RepositoryContext
 {

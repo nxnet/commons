@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver;
+package io.nxnet.commons.mvnutils.pom.resolver;
 
 public class ModelException extends Exception
 {

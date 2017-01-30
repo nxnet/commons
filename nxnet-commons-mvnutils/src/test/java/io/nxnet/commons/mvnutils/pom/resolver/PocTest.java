@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver;
+package io.nxnet.commons.mvnutils.pom.resolver;
 
 import java.util.List;
 

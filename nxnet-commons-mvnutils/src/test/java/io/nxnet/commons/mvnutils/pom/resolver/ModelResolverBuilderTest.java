@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver;
+package io.nxnet.commons.mvnutils.pom.resolver;
 
 import java.io.File;
 
@@ -12,8 +12,10 @@ import org.eclipse.aether.RequestTrace;
 import org.junit.Before;
 import org.junit.Test;
 
-import hr.ericsson.m2mse.testutils.pom.resolver.impl.DefaultModelResolverBuilder;
-import hr.ericsson.m2mse.testutils.pom.resolver.impl.DefaultRepositoryContextFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ModelResolverBuilder;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultModelResolverBuilder;
+import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultRepositoryContextFactory;
 
 public class ModelResolverBuilderTest
 {

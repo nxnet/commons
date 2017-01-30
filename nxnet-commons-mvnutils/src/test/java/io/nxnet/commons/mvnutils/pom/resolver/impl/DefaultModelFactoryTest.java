@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.io.File;
 
@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultModelFactory;
 
 public class DefaultModelFactoryTest
 {

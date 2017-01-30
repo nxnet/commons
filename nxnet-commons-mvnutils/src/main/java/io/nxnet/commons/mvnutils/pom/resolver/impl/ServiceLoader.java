@@ -1,4 +1,4 @@
-package hr.ericsson.m2mse.testutils.pom.resolver.impl;
+package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
