@@ -71,6 +71,16 @@
         </pluginManagement>
     </build>
 
+    <properties>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <version-maven-source-plugin>3.0.1</version-maven-source-plugin>
+        <version-maven-javadoc-plugin>2.10.4</version-maven-javadoc-plugin>
+        <version-maven-gpg-plugin>1.6</version-maven-gpg-plugin>
+        <version-maven-release-plugin>2.5.3</version-maven-release-plugin>
+        <version-nexus-staging-maven-plugin>1.6.7</version-nexus-staging-maven-plugin>
+    </properties>
+
     <profiles>
         <profile>
             <id>release</id>
