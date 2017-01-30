@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.nxnet.commons</groupId>
         <artifactId>nxnet-commons</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>nxnet-commons-mvnutils</artifactId>
@@ -36,9 +36,24 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-connector-basic</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-transport-file</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-transport-http</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <!-- <dependency>
+            <groupId>org.eclipse.aether</groupId>
             <artifactId>aether-demo-snippets</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -5,9 +5,9 @@
     
     <groupId>io.nxnet.commons</groupId>
     <artifactId>nxnet-commons</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>NxNet Commons</name>
+    <name>nxnet commons</name>
     <description>Commons utilities for Java projects</description>
     
     <modules>
