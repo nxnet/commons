@@ -10,6 +10,8 @@
  *******************************************************************************/
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +67,7 @@ public class Booter
     public static List<RemoteRepository> newRepositories()
     {
         return new ArrayList<RemoteRepository>(Arrays.asList(
-                newLocalRepository(), newEtkcRepository(), newCentralRepository()));
+                newLocalRepository()/*, newEtkcRepository(), newCentralRepository()*/));
     }
 
     private static RemoteRepository newCentralRepository()
@@ -82,9 +84,21 @@ public class Booter
 
     private static RemoteRepository newLocalRepository()
     {
-        String localRepoPath = System.getProperty("user.home") + "/.m2/repository/";
-        return new RemoteRepository.Builder( "local", "default", "file://" + localRepoPath )
+        return new RemoteRepository.Builder( "local", "default", getLocalRepoLocation().toExternalForm() )
                 .build();
+    }
+    
+    private static URL getLocalRepoLocation()
+    {
+        String localRepoPath = System.getProperty("user.home") + "/.m2/repository/";
+        try
+        {
+            return new URL("file://" + localRepoPath);
+        }
+        catch (MalformedURLException e)
+        {
+            throw new IllegalStateException(e);
+        }
     }
 
 }
