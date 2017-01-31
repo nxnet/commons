@@ -50,9 +50,9 @@ public class Booter
         // uncomment to generate dirty trees
         // session.setDependencyGraphTransformer( null );
         
-        DefaultProxySelector proxySelector = new DefaultProxySelector();
-        proxySelector.add(new Proxy("http", "localhost", 3128), "localhost|127.0.0.1");
-        session.setProxySelector(proxySelector);
+        //DefaultProxySelector proxySelector = new DefaultProxySelector();
+        //proxySelector.add(new Proxy("http", "localhost", 3128), "localhost|127.0.0.1");
+        //session.setProxySelector(proxySelector);
 
         return session;
     }
@@ -65,19 +65,19 @@ public class Booter
     public static List<RemoteRepository> newRepositories()
     {
         return new ArrayList<RemoteRepository>(Arrays.asList(
-                newLocalRepository()/*, newEtkcRepository(), newCentralRepository()*/));
+                newLocalRepository(), newEtkcRepository(), newCentralRepository()));
     }
 
     private static RemoteRepository newCentralRepository()
     {
         return new RemoteRepository.Builder( "central", "default", "http://central.maven.org/maven2/" )
-                .setProxy(new Proxy("http", "localhost", 3128)).build();
+                /*.setProxy(new Proxy("http", "localhost", 3128))*/.build();
     }
 
     private static RemoteRepository newEtkcRepository()
     {
         return new RemoteRepository.Builder( "etkc", "default", "http://ehrzgux504.etk.extern.eu.ericsson.se/content/groups/parent/" )
-                .setProxy(new Proxy("http", "localhost", 3128)).build();
+                /*.setProxy(new Proxy("http", "localhost", 3128))*/.build();
     }
 
     private static RemoteRepository newLocalRepository()
