@@ -9,9 +9,10 @@
     </parent>
     
     <artifactId>nxnet-commons-mvnutils</artifactId>
+    <packaging>bundle</packaging>
     <name>nxnet commons mvnutils</name>
     <description>Common utilities for maven projects</description>
-
+    
     <dependencies>
         <dependency>
             <groupId>org.eclipse.aether</groupId>

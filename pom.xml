@@ -57,6 +57,20 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <instructions>
+                            <!-- embed all compile and runtime scope dependencies -->
+                            <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                            <Embed-Transitive>true</Embed-Transitive>
+                            <Embed-Directory>lib</Embed-Directory>
+                        </instructions>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>${version-maven-release-plugin}</version>
@@ -69,6 +83,13 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <properties>
