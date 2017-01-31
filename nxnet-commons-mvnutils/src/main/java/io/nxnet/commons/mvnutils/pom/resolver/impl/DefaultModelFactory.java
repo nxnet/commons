@@ -31,7 +31,7 @@ public class DefaultModelFactory implements ModelFactory
     public DefaultModelFactory()
     {
         // Repository context factory
-        this.repositoryContextFactory = ServiceLoader.getService(RepositoryContextFactory.class);
+        this.repositoryContextFactory = new DefaultRepositoryContextFactory();
         
         // Proxies
         this.proxies = new HashMap<Proxy, String>();
