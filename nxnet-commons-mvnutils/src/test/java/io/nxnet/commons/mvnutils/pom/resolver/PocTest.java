@@ -1,6 +1,8 @@
 package io.nxnet.commons.mvnutils.pom.resolver;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -9,6 +11,7 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.repository.Proxy;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest;
 import org.eclipse.aether.resolution.ArtifactDescriptorResult;
@@ -22,17 +25,23 @@ import io.nxnet.commons.mvnutils.pom.resolver.impl.Booter;
 
 public class PocTest
 {
+    private Proxy proxy;
+    
+    private Map<Proxy, String> proxies; 
 
     public PocTest()
     {
-        // TODO Auto-generated constructor stub
+        this.proxy = new Proxy("http", "localhost", 3128);
+        this.proxies = new HashMap<Proxy, String>();
+        this.proxies.put(this.proxy, "localhost|127.0.0.1");
     }
 
+    @Test
     public void testA() throws Exception
     {
         RepositorySystem repoSystem = Booter.newRepositorySystem();
         
-        RepositorySystemSession session = Booter.newRepositorySystemSession( repoSystem );
+        RepositorySystemSession session = Booter.newRepositorySystemSession(repoSystem, this.proxies);
  
         Dependency dependency =
             new Dependency( new DefaultArtifact( "org.apache.maven:maven-profile:2.2.1" ), "compile" );
@@ -63,14 +72,14 @@ public class PocTest
         RepositorySystem system = Booter.newRepositorySystem();
 
         // Repository system session
-        RepositorySystemSession session = Booter.newRepositorySystemSession( system );
+        RepositorySystemSession session = Booter.newRepositorySystemSession(system, proxies);
 
         // Artifact
         Artifact artifact = new DefaultArtifact(
                 "hr.ericsson.m2mse.security:m2mse-security-rest-impl:pom:3.1.0-SNAPSHOT");
 
         // Remote repositories
-        List<RemoteRepository> remoteRepositories = Booter.newRepositories();
+        List<RemoteRepository> remoteRepositories = Booter.newRepositories(this.proxy);
         
         // Artifact request 
         ArtifactRequest artifactRequest = new ArtifactRequest();

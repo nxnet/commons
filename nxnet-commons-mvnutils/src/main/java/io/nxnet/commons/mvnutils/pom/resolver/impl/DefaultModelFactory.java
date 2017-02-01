@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.maven.model.Model;
 import org.apache.maven.model.building.DefaultModelBuilder;
 import org.apache.maven.model.building.DefaultModelBuilderFactory;
 import org.apache.maven.model.building.DefaultModelBuildingRequest;
@@ -17,6 +16,7 @@ import org.eclipse.aether.RequestTrace;
 import org.eclipse.aether.repository.Proxy;
 import org.eclipse.aether.util.repository.DefaultProxySelector;
 
+import io.nxnet.commons.mvnutils.pom.resolver.Model;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelException;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
@@ -40,16 +40,8 @@ public class DefaultModelFactory implements ModelFactory
     public Model getModel(File pom) throws ModelException
     {
         // Repository context
-        RepositoryContext repositoryContext = this.repositoryContextFactory.getRepositoryContext();
-
-        // Define proxy
-        DefaultProxySelector proxySelector = new DefaultProxySelector();
-        for (Map.Entry<Proxy, String> proxyEntry : proxies.entrySet())
-        {
-            proxySelector.add(proxyEntry.getKey(), proxyEntry.getValue());
-        }
-        RepositorySystemSession session = repositoryContext.getRepositorySystemSession();
-        ((DefaultRepositorySystemSession)session).setProxySelector(proxySelector);
+        RepositoryContext repositoryContext = this.repositoryContextFactory
+                .getRepositoryContext(proxies);
         
         // Model resolver (repository aware)
         ModelResolver modelResolver = new DefaultModelResolverBuilder()
@@ -68,7 +60,7 @@ public class DefaultModelFactory implements ModelFactory
         DefaultModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
         
         // Model instance
-        Model model = null;
+        org.apache.maven.model.Model model = null;
         try
         {
             model = modelBuilder.build(modelBuildingRequest).getEffectiveModel();
@@ -77,7 +69,7 @@ public class DefaultModelFactory implements ModelFactory
         {
             throw new ModelException("Error building pom model", e);
         }
-        return model;
+        return new Model(model);
     }
 
     public RepositoryContextFactory getRepositoryContextFactory()

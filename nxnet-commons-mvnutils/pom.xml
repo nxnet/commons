@@ -13,6 +13,28 @@
     <name>nxnet commons mvnutils</name>
     <description>Common utilities for maven projects</description>
     
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <configuration>
+                        <instructions>
+                            <Import-Package>
+                                *;resolution:=optional
+                            </Import-Package>
+                            <Export-Package>
+                                io.nxnet.commons.mvnutils.pom.resolver,
+                                io.nxnet.commons.mvnutils.pom.resolver.impl
+                            </Export-Package>
+                        </instructions>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>org.eclipse.aether</groupId>
