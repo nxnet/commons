@@ -328,16 +328,26 @@ public class Booter
 
     public static RemoteRepository newCentralRepository(Proxy proxy)
     {
-        return new RemoteRepository
-                .Builder("central", "default", "http://central.maven.org/maven2/")
-                .setProxy(proxy).build();
+        RemoteRepository.Builder repositoryBuilder = new RemoteRepository
+                .Builder("central", "default", "http://central.maven.org/maven2/");
+        if (proxy != null)
+        {
+            repositoryBuilder.setProxy(proxy);
+        }
+        
+        return repositoryBuilder.build();
     }
 
     public static RemoteRepository newEtkcRepository(Proxy proxy)
     {
-        return new RemoteRepository
-                .Builder("etkc", "default", "http://ehrzgux504.etk.extern.eu.ericsson.se/content/groups/parent/")
-                .setProxy(proxy).build();
+        RemoteRepository.Builder repositoryBuilder = new RemoteRepository
+                .Builder("etkc", "default", "http://ehrzgux504.etk.extern.eu.ericsson.se/content/groups/parent/");
+        if (proxy != null)
+        {
+            repositoryBuilder.setProxy(proxy);
+        }
+        
+        return repositoryBuilder.build();
     }
 
     public static RemoteRepository newLocalRepository()

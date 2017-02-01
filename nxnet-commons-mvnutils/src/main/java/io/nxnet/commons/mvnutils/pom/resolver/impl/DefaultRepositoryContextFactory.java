@@ -3,6 +3,7 @@ package io.nxnet.commons.mvnutils.pom.resolver.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.aether.internal.impl.DefaultRemoteRepositoryManager;
 import org.eclipse.aether.repository.Proxy;
@@ -31,6 +32,11 @@ public class DefaultRepositoryContextFactory implements RepositoryContextFactory
     
     private Proxy pickOneProxy(Map<Proxy, String> proxies)
     {
-        return proxies.keySet().iterator().next();
+        Set<Proxy> _proxies = proxies.keySet();
+        if (_proxies == null || _proxies.isEmpty())
+        {
+            return null;
+        }
+        return _proxies.iterator().next();
     }
 }

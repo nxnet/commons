@@ -10,11 +10,8 @@ import org.apache.maven.model.building.DefaultModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest.RepositoryMerging;
-import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.RequestTrace;
 import org.eclipse.aether.repository.Proxy;
-import org.eclipse.aether.util.repository.DefaultProxySelector;
 
 import io.nxnet.commons.mvnutils.pom.resolver.Model;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelException;

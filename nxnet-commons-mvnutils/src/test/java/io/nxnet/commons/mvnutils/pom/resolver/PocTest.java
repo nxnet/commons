@@ -45,7 +45,8 @@ public class PocTest
  
         Dependency dependency =
             new Dependency( new DefaultArtifact( "org.apache.maven:maven-profile:2.2.1" ), "compile" );
-        RemoteRepository central = new RemoteRepository.Builder( "central", "default", "http://repo1.maven.org/maven2/" ).build();
+        RemoteRepository central = new RemoteRepository
+                .Builder( "central", "default", "http://repo1.maven.org/maven2/" ).setProxy(this.proxy).build();
  
         CollectRequest collectRequest = new CollectRequest();
         collectRequest.setRoot( dependency );
