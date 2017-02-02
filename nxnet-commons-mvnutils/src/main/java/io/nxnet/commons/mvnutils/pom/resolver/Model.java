@@ -29,13 +29,19 @@ public class Model extends org.apache.maven.model.Model
     
     private org.apache.maven.model.Model delegee;
     
+    private TreeNode<Dependency> dependencyTree;
+    
     public Model(org.apache.maven.model.Model model)
     {
         this.delegee = model;
     }
     
     public TreeNode<Dependency> getDependencyTree() {
-        return null;
+        return this.dependencyTree;
+    }
+
+    public void setDependencyTree(TreeNode<Dependency> dependencyTree) {
+        this.dependencyTree = dependencyTree;
     }
 
     /**
