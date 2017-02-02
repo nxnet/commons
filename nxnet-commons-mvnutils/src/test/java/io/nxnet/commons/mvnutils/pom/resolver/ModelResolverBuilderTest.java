@@ -12,30 +12,38 @@ import org.eclipse.aether.RequestTrace;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.nxnet.commons.mvnutils.pom.resolver.ModelResolverBuilder;
-import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
 import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultModelResolverBuilder;
-import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultRepositoryContextFactory;
 
 public class ModelResolverBuilderTest
 {
     private ModelResolverBuilder modelResolverBuilder;
     
-    private RepositoryContext repositoryContext;
+    private RepositorySystemFactory repositorySystemFactory;
+    
+    private RepositorySystemSessionFactory repositorySystemSessionFactory;
+    
+    private RemoteRepositoryFactory remoteRepositoryFactory;
+    
+    private RemoteRepositoryManagerFactory remoteRepositoryManagerFactory;
     
     @Before
     public void setUp()
     {
         this.modelResolverBuilder = new DefaultModelResolverBuilder();
-        
-        this.repositoryContext = new DefaultRepositoryContextFactory().getRepositoryContext();
+        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
+        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
     }
 
     @Test
     public void testA() throws Exception
     {   
         ModelResolver modelResolver = this.modelResolverBuilder
-            .setRepositoryContext(this.repositoryContext)
+            .setRepositorySystem(this.repositorySystemFactory.getRepositorySystem())
+            .setRepositorySystemSession(this.repositorySystemSessionFactory.getRepositorySystemSession())
+            .addRemoteRepository(this.remoteRepositoryFactory.getRemoteRepository())
+            .setRemoteRepositoryManager(this.remoteRepositoryManagerFactory.getRemoteRepositoryManager())
             .setRepositoryMerging(RepositoryMerging.REQUEST_DOMINANT)
             .setRequestTrace(new RequestTrace(null))
             .build();

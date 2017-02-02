@@ -1,9 +1,6 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.maven.model.building.DefaultModelBuilder;
 import org.apache.maven.model.building.DefaultModelBuilderFactory;
@@ -11,48 +8,64 @@ import org.apache.maven.model.building.DefaultModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest.RepositoryMerging;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.RequestTrace;
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.repository.Proxy;
+import org.eclipse.aether.impl.RemoteRepositoryManager;
+import org.eclipse.aether.repository.RemoteRepository;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyException;
-import io.nxnet.commons.mvnutils.pom.resolver.DependencyFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
 import io.nxnet.commons.mvnutils.pom.resolver.Model;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelException;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
-import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContextFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class DefaultModelFactory implements ModelFactory
 {   
-    protected RepositoryContextFactory repositoryContextFactory;
+    protected DependencyResolver dependencyResolver;
     
-    protected DependencyFactory dependencyFactory;
+    protected RepositorySystemFactory repositorySystemFactory;
     
-    protected Map<Proxy, String> proxies;
+    protected RepositorySystemSessionFactory repositorySystemSessionFactory;
+    
+    protected RemoteRepositoryFactory remoteRepositoryFactory;
+    
+    protected RemoteRepositoryManagerFactory remoteRepositoryManagerFactory;
     
     public DefaultModelFactory()
-    {
-        // Proxies
-        this.proxies = new HashMap<Proxy, String>();
-        
-        // Repository context factory
-        this.repositoryContextFactory = new DefaultRepositoryContextFactory();
-        
-        // Dependency factory
-        this.dependencyFactory = new DefaultDependencyFactory();
+    {   
+        this.dependencyResolver = ServiceLocator.getInstance().getService(DependencyResolver.class);
+        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
+        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
     }
 
     public Model getModel(File pom) throws ModelException
     {
-        // Repository context
-        RepositoryContext repositoryContext = this.repositoryContextFactory
-                .getRepositoryContext(proxies);
+        RepositorySystem repositorySystem = this.repositorySystemFactory
+                .getRepositorySystem();
+        
+        RepositorySystemSession repositorySystemSession = this.repositorySystemSessionFactory
+                .getRepositorySystemSession();
+        
+        RemoteRepository remoteRepository = this.remoteRepositoryFactory
+                .getRemoteRepository();
+        
+        RemoteRepositoryManager remoteRepositoryManager = this.remoteRepositoryManagerFactory
+                .getRemoteRepositoryManager();
         
         // Model resolver (repository aware)
         ModelResolver modelResolver = new DefaultModelResolverBuilder()
-                .setRepositoryContext(repositoryContext)
+                .setRepositorySystem(repositorySystem)
+                .setRepositorySystemSession(repositorySystemSession)
+                .addRemoteRepository(remoteRepository)
+                .setRemoteRepositoryManager(remoteRepositoryManager)
                 .setRepositoryMerging(RepositoryMerging.REQUEST_DOMINANT)
                 .setRequestTrace(new RequestTrace(null))
                 .build();
@@ -82,7 +95,7 @@ public class DefaultModelFactory implements ModelFactory
         // Set dependency tree
         try
         {
-            model.setDependencyTree(this.dependencyFactory.getDependencies(
+            model.setDependencyTree(this.dependencyResolver.getDependencyTree(
                     model.getGroupId() + ":"+ model.getArtifactId() + ":"+ model.getVersion()));
         }
         catch (DependencyException e)
@@ -93,35 +106,84 @@ public class DefaultModelFactory implements ModelFactory
         return model;
     }
 
-    public RepositoryContextFactory getRepositoryContextFactory()
+    /**
+     * @return the dependencyResolver
+     */
+    public DependencyResolver getDependencyResolver()
     {
-        return repositoryContextFactory;
-    }
-
-    public void setRepositoryContextFactory(RepositoryContextFactory repositoryContextFactory)
-    {
-        this.repositoryContextFactory = repositoryContextFactory;
+        return dependencyResolver;
     }
 
     /**
-     * @return the dependencyFactory
+     * @param dependencyResolver the dependencyResolver to set
      */
-    public DependencyFactory getDependencyFactory()
+    public void setDependencyResolver(DependencyResolver dependencyResolver)
     {
-        return dependencyFactory;
+        this.dependencyResolver = dependencyResolver;
     }
 
     /**
-     * @param dependencyFactory the dependencyFactory to set
+     * @return the repositorySystemFactory
      */
-    public void setDependencyFactory(DependencyFactory dependencyFactory)
+    public RepositorySystemFactory getRepositorySystemFactory()
     {
-        this.dependencyFactory = dependencyFactory;
+        return repositorySystemFactory;
     }
 
-    public void addProxy(String type, String host, int port, String nonProxyHosts)
+    /**
+     * @param repositorySystemFactory the repositorySystemFactory to set
+     */
+    public void setRepositorySystemFactory(RepositorySystemFactory repositorySystemFactory)
     {
-        this.proxies.put(new Proxy(type, host, port), nonProxyHosts);
-        ((DefaultDependencyFactory)this.dependencyFactory).addProxy(type, host, port, nonProxyHosts);
+        this.repositorySystemFactory = repositorySystemFactory;
     }
+
+    /**
+     * @return the repositorySystemSessionFactory
+     */
+    public RepositorySystemSessionFactory getRepositorySystemSessionFactory()
+    {
+        return repositorySystemSessionFactory;
+    }
+
+    /**
+     * @param repositorySystemSessionFactory the repositorySystemSessionFactory to set
+     */
+    public void setRepositorySystemSessionFactory(RepositorySystemSessionFactory repositorySystemSessionFactory)
+    {
+        this.repositorySystemSessionFactory = repositorySystemSessionFactory;
+    }
+
+    /**
+     * @return the remoteRepositoryFactory
+     */
+    public RemoteRepositoryFactory getRemoteRepositoryFactory()
+    {
+        return remoteRepositoryFactory;
+    }
+
+    /**
+     * @param remoteRepositoryFactory the remoteRepositoryFactory to set
+     */
+    public void setRemoteRepositoryFactory(RemoteRepositoryFactory remoteRepositoryFactory)
+    {
+        this.remoteRepositoryFactory = remoteRepositoryFactory;
+    }
+
+    /**
+     * @return the remoteRepositoryManagerFactory
+     */
+    public RemoteRepositoryManagerFactory getRemoteRepositoryManagerFactory()
+    {
+        return remoteRepositoryManagerFactory;
+    }
+
+    /**
+     * @param remoteRepositoryManagerFactory the remoteRepositoryManagerFactory to set
+     */
+    public void setRemoteRepositoryManagerFactory(RemoteRepositoryManagerFactory remoteRepositoryManagerFactory)
+    {
+        this.remoteRepositoryManagerFactory = remoteRepositoryManagerFactory;
+    }
+
 }

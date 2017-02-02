@@ -5,6 +5,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
 {
@@ -12,7 +13,7 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
     
     public CentralRemoteRepositoryFactory()
     {
-        this.proxyDefinitionFactory = new DefaultProxyDefinitionFactory();
+        this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
     }
     
     public RemoteRepository getRemoteRepository()
@@ -29,6 +30,22 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
         }
         
         return repositoryBuilder.build();
+    }
+
+    /**
+     * @return the proxyDefinitionFactory
+     */
+    public ProxyDefinitionFactory getProxyDefinitionFactory()
+    {
+        return proxyDefinitionFactory;
+    }
+
+    /**
+     * @param proxyDefinitionFactory the proxyDefinitionFactory to set
+     */
+    public void setProxyDefinitionFactory(ProxyDefinitionFactory proxyDefinitionFactory)
+    {
+        this.proxyDefinitionFactory = proxyDefinitionFactory;
     }
 
 }

@@ -43,13 +43,36 @@ import org.eclipse.aether.spi.log.LoggerFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 
+import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class DefaultRepositorySystemFactory implements RepositorySystemFactory
 {
+    private RepositorySystem instance = null;
+    
+    private RemoteRepositoryManagerFactory remoteRepositoryManagerFactory;
+    
+    public DefaultRepositorySystemFactory()
+    {
+        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().
+                getService(RemoteRepositoryManagerFactory.class);
+    }
+    
     public RepositorySystem getRepositorySystem()
     {
+        if (this.instance == null)
+        {
+            this.instance = initRepositorySystem();
+        }
+        
+        return this.instance;
+    }
+
+    private RepositorySystem initRepositorySystem()
+    {
         DefaultRepositorySystem repositorySystem = new DefaultRepositorySystem();
+        
         
         // Logger factory
         LoggerFactory loggerFactory = new Slf4jLoggerFactory(); // OK
@@ -152,7 +175,8 @@ public class DefaultRepositorySystemFactory implements RepositorySystemFactory
         repositorySystem.setLocalRepositoryProvider(localRepositoryProvider);
         
         // Remote repository manager
-        DefaultRemoteRepositoryManager remoteRepositoryManager = new DefaultRemoteRepositoryManager(); // OK
+        DefaultRemoteRepositoryManager remoteRepositoryManager = (DefaultRemoteRepositoryManager)this
+                .remoteRepositoryManagerFactory.getRemoteRepositoryManager(); // OK
         remoteRepositoryManager.setLoggerFactory(loggerFactory);
         remoteRepositoryManager.setUpdatePolicyAnalyzer(updatePolicyAnalyzer);
         remoteRepositoryManager.setChecksumPolicyProvider(checksumPolicyProvider);
@@ -241,5 +265,4 @@ public class DefaultRepositorySystemFactory implements RepositorySystemFactory
         
         return repositorySystem;
     }
-
 }

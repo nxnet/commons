@@ -15,7 +15,7 @@ public class LocalhostRemoteRepositoryFactory implements RemoteRepositoryFactory
     
     public LocalhostRemoteRepositoryFactory()
     {
-        this.proxyDefinitionFactory = new DefaultProxyDefinitionFactory();
+        this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
     }
     
     public RemoteRepository getRemoteRepository()

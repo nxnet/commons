@@ -1,8 +1,7 @@
 package io.nxnet.commons.mvnutils.pom.resolver;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -11,7 +10,6 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyNode;
-import org.eclipse.aether.repository.Proxy;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest;
 import org.eclipse.aether.resolution.ArtifactDescriptorResult;
@@ -21,32 +19,29 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.junit.Test;
 
-import io.nxnet.commons.mvnutils.pom.resolver.impl.Booter;
-
 public class PocTest
 {
-    private Proxy proxy;
+    private RepositorySystemFactory repositorySystemFactory;
     
-    private Map<Proxy, String> proxies; 
-
+    private RepositorySystemSessionFactory repositorySystemSessionFactory;
+    
+    private RemoteRepositoryFactory remoteRepositoryFactory;
+    
     public PocTest()
     {
-        this.proxy = new Proxy("http", "localhost", 3128);
-        this.proxies = new HashMap<Proxy, String>();
-        this.proxies.put(this.proxy, "localhost|127.0.0.1");
+     
     }
 
     @Test
     public void testA() throws Exception
     {
-        RepositorySystem repoSystem = Booter.newRepositorySystem();
+        RepositorySystem repoSystem = this.repositorySystemFactory.getRepositorySystem();
         
-        RepositorySystemSession session = Booter.newRepositorySystemSession(repoSystem, this.proxies);
+        RepositorySystemSession session = this.repositorySystemSessionFactory.getRepositorySystemSession();
  
         Dependency dependency =
             new Dependency( new DefaultArtifact( "org.apache.maven:maven-profile:2.2.1" ), "compile" );
-        RemoteRepository central = new RemoteRepository
-                .Builder( "central", "default", "http://repo1.maven.org/maven2/" ).setProxy(this.proxy).build();
+        RemoteRepository central = this.remoteRepositoryFactory.getRemoteRepository();
  
         CollectRequest collectRequest = new CollectRequest();
         collectRequest.setRoot( dependency );
@@ -70,17 +65,17 @@ public class PocTest
         System.out.println( this.getClass().getSimpleName() );
 
         // Repository system
-        RepositorySystem system = Booter.newRepositorySystem();
+        RepositorySystem system = this.repositorySystemFactory.getRepositorySystem();
 
         // Repository system session
-        RepositorySystemSession session = Booter.newRepositorySystemSession(system, proxies);
+        RepositorySystemSession session = this.repositorySystemSessionFactory.getRepositorySystemSession();
 
         // Artifact
         Artifact artifact = new DefaultArtifact(
                 "hr.ericsson.m2mse.security:m2mse-security-rest-impl:pom:3.1.0-SNAPSHOT");
 
         // Remote repositories
-        List<RemoteRepository> remoteRepositories = Booter.newRepositories(this.proxy);
+        List<RemoteRepository> remoteRepositories = Arrays.asList(this.remoteRepositoryFactory.getRemoteRepository());
         
         // Artifact request 
         ArtifactRequest artifactRequest = new ArtifactRequest();

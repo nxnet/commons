@@ -1,5 +1,8 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.maven.model.Dependency;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -8,42 +11,51 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.CollectResult;
 import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.ArtifactDescriptorException;
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest;
 import org.eclipse.aether.resolution.ArtifactDescriptorResult;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyException;
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
-import io.nxnet.commons.mvnutils.pom.resolver.RepositoryContext;
+import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 import io.nxnet.commons.mvnutils.pom.resolver.TreeNode;
 
 public class DefaultDependencyResolver implements DependencyResolver
 {
-    private RepositoryContext repositoryContext;
-
+    private RepositorySystemFactory repositorySystemFactory;
+    
+    private RepositorySystemSessionFactory repositorySystemSessionFactory;
+    
+    private RemoteRepositoryFactory remoteRepositoryFactory;
+    
     public DefaultDependencyResolver()
     {
-        super();
-    }
-
-    public DefaultDependencyResolver(RepositoryContext repositoryContext)
-    {
-        this.repositoryContext = repositoryContext;
+        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
     }
 
     public TreeNode<Dependency> getDependencyTree(String artifactCoordinates) throws DependencyException
     {
-        RepositorySystem system = this.repositoryContext.getRepositorySystem();
+        RepositorySystem system = this.repositorySystemFactory.getRepositorySystem();
 
-        RepositorySystemSession session = this.repositoryContext.getRepositorySystemSession();
+        RepositorySystemSession session = this.repositorySystemSessionFactory.getRepositorySystemSession();
 
+        // Remote repositories
+        List<RemoteRepository> remoteRepositories = Arrays.asList(
+                this.remoteRepositoryFactory.getRemoteRepository());
+        
         // Artifact
         Artifact artifact = new DefaultArtifact(artifactCoordinates);
 
         // Artifact descriptor
         ArtifactDescriptorRequest descriptorRequest = new ArtifactDescriptorRequest();
-        descriptorRequest.setArtifact( artifact );
-        descriptorRequest.setRepositories(this.repositoryContext.getRemoteRepositories());
+        descriptorRequest.setArtifact(artifact);
+        descriptorRequest.setRepositories(remoteRepositories);
         ArtifactDescriptorResult descriptorResult = null;
         try
         {
@@ -78,19 +90,51 @@ public class DefaultDependencyResolver implements DependencyResolver
     }
 
     /**
-     * @return the repositoryContext
+     * @return the repositorySystemFactory
      */
-    public RepositoryContext getRepositoryContext()
+    public RepositorySystemFactory getRepositorySystemFactory()
     {
-        return repositoryContext;
+        return repositorySystemFactory;
     }
 
     /**
-     * @param repositoryContext the repositoryContext to set
+     * @param repositorySystemFactory the repositorySystemFactory to set
      */
-    public void setRepositoryContext(RepositoryContext repositoryContext)
+    public void setRepositorySystemFactory(RepositorySystemFactory repositorySystemFactory)
     {
-        this.repositoryContext = repositoryContext;
+        this.repositorySystemFactory = repositorySystemFactory;
+    }
+
+    /**
+     * @return the repositorySystemSessionFactory
+     */
+    public RepositorySystemSessionFactory getRepositorySystemSessionFactory()
+    {
+        return repositorySystemSessionFactory;
+    }
+
+    /**
+     * @param repositorySystemSessionFactory the repositorySystemSessionFactory to set
+     */
+    public void setRepositorySystemSessionFactory(RepositorySystemSessionFactory repositorySystemSessionFactory)
+    {
+        this.repositorySystemSessionFactory = repositorySystemSessionFactory;
+    }
+
+    /**
+     * @return the remoteRepositoryFactory
+     */
+    public RemoteRepositoryFactory getRemoteRepositoryFactory()
+    {
+        return remoteRepositoryFactory;
+    }
+
+    /**
+     * @param remoteRepositoryFactory the remoteRepositoryFactory to set
+     */
+    public void setRemoteRepositoryFactory(RemoteRepositoryFactory remoteRepositoryFactory)
+    {
+        this.remoteRepositoryFactory = remoteRepositoryFactory;
     }
 
 }

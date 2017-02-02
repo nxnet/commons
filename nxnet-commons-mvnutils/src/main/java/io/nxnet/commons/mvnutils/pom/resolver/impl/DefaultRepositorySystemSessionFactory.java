@@ -34,6 +34,7 @@ import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class DefaultRepositorySystemSessionFactory implements RepositorySystemSessionFactory
 {
@@ -45,12 +46,12 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
     
     public DefaultRepositorySystemSessionFactory()
     {
-        this.repositorySystemFactory = new DefaultRepositorySystemFactory();
-        this.proxyDefinitionFactory = new DefaultProxyDefinitionFactory();
-        this.localRepositoryFactory = new DefaultLocalRepositoryFactory();
+        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
+        this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
+        this.localRepositoryFactory = ServiceLocator.getInstance().getService(LocalRepositoryFactory.class);
     }
 
-    public RepositorySystemSession getSession()
+    public RepositorySystemSession getRepositorySystemSession()
     {
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession();
 
@@ -117,6 +118,54 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
         session.setProxySelector(proxySelector);
 
         return session;
+    }
+
+    /**
+     * @return the repositorySystemFactory
+     */
+    public RepositorySystemFactory getRepositorySystemFactory()
+    {
+        return repositorySystemFactory;
+    }
+
+    /**
+     * @param repositorySystemFactory the repositorySystemFactory to set
+     */
+    public void setRepositorySystemFactory(RepositorySystemFactory repositorySystemFactory)
+    {
+        this.repositorySystemFactory = repositorySystemFactory;
+    }
+
+    /**
+     * @return the proxyDefinitionFactory
+     */
+    public ProxyDefinitionFactory getProxyDefinitionFactory()
+    {
+        return proxyDefinitionFactory;
+    }
+
+    /**
+     * @param proxyDefinitionFactory the proxyDefinitionFactory to set
+     */
+    public void setProxyDefinitionFactory(ProxyDefinitionFactory proxyDefinitionFactory)
+    {
+        this.proxyDefinitionFactory = proxyDefinitionFactory;
+    }
+
+    /**
+     * @return the localRepositoryFactory
+     */
+    public LocalRepositoryFactory getLocalRepositoryFactory()
+    {
+        return localRepositoryFactory;
+    }
+
+    /**
+     * @param localRepositoryFactory the localRepositoryFactory to set
+     */
+    public void setLocalRepositoryFactory(LocalRepositoryFactory localRepositoryFactory)
+    {
+        this.localRepositoryFactory = localRepositoryFactory;
     }
 
 }

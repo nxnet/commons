@@ -18,7 +18,6 @@ public class DefaultModelFactoryTest
     public void setUp()
     {
         this.modelFactory = new DefaultModelFactory();
-        this.modelFactory.addProxy("http", "localhost", 3128, "localhost|127.0.0.1");
     }
 
     @Test

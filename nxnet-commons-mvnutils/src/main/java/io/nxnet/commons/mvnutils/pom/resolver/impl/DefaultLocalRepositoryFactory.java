@@ -10,5 +10,4 @@ public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
     {
         return new LocalRepository("target/local-repo");
     }
-
 }

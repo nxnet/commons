@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ServiceLoader
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+
+public class ServiceLoaderServiceLocator extends ServiceLocator
 {
-    public static <S> S getService(Class<S> clazz) 
+    public <S> S getService(Class<S> clazz) 
     {
         if (clazz == null)
         {

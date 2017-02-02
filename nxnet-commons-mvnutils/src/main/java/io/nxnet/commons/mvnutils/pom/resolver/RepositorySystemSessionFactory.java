@@ -4,5 +4,5 @@ import org.eclipse.aether.RepositorySystemSession;
 
 public interface RepositorySystemSessionFactory
 {
-    RepositorySystemSession getSession();
+    RepositorySystemSession getRepositorySystemSession();
 }

@@ -12,7 +12,7 @@ public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
     
     public EtkcRemoteRepositoryFactory()
     {
-        this.proxyDefinitionFactory = new DefaultProxyDefinitionFactory();
+        this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
     }
     
     public RemoteRepository getRemoteRepository()
