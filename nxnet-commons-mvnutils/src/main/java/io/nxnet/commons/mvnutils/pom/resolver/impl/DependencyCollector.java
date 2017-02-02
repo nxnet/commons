@@ -15,18 +15,22 @@ public class DependencyCollector implements DependencyVisitor
 
     public boolean visitEnter(DependencyNode node)
     {
-        Artifact nodeArtifact = node.getArtifact();
+        DependencyNodeWrapper wrapper = new DependencyNodeWrapper(node);
         
-        Dependency dependency = new Dependency();
-        dependency.setGroupId(nodeArtifact.getGroupId());
-        dependency.setArtifactId(nodeArtifact.getArtifactId());
-        dependency.setVersion(nodeArtifact.getVersion());
-        dependency.setClassifier(nodeArtifact.getClassifier());
-        dependency.setType(nodeArtifact.getExtension());
+        Artifact artifact = wrapper.getArtifact();
+        
+        Dependency mavenDependency = new Dependency();
+        mavenDependency.setGroupId(artifact.getGroupId());
+        mavenDependency.setArtifactId(artifact.getArtifactId());
+        mavenDependency.setVersion(wrapper.getManagedVersion());
+        mavenDependency.setClassifier(artifact.getClassifier());
+        mavenDependency.setType(artifact.getExtension());
+        mavenDependency.setScope(wrapper.getManagedScope());
+        mavenDependency.setOptional(wrapper.isOptional());
         
         if (this.root == null)
         {
-            this.root = new TreeNodeImpl<Dependency>(dependency);
+            this.root = new TreeNodeImpl<Dependency>(mavenDependency);
         }
         else
         {
@@ -39,12 +43,12 @@ public class DependencyCollector implements DependencyVisitor
             
             if (leaf.getParentNode() == null || node.getChildren().size() > 0)
             {
-                leaf.addChildNode(new TreeNodeImpl<Dependency>(dependency, leaf));
+                leaf.addChildNode(new TreeNodeImpl<Dependency>(mavenDependency, leaf));
             }
             else
             {
                 ((TreeNodeImpl<Dependency>)leaf.getParentNode()).addChildNode(
-                        new TreeNodeImpl<Dependency>(dependency, leaf.getParentNode()));
+                        new TreeNodeImpl<Dependency>(mavenDependency, leaf.getParentNode()));
             }
         }
         
