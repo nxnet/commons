@@ -5,6 +5,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
 {
@@ -13,6 +14,11 @@ public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
     public EtkcRemoteRepositoryFactory()
     {
         this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
+    }
+
+    public void init()
+    {
+        this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
     }
     
     public RemoteRepository getRemoteRepository()

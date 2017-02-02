@@ -10,4 +10,10 @@ public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
     {
         return new LocalRepository("target/local-repo");
     }
+
+    public void init()
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

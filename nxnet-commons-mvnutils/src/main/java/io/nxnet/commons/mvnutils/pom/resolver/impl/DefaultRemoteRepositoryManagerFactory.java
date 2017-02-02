@@ -23,4 +23,10 @@ public class DefaultRemoteRepositoryManagerFactory implements RemoteRepositoryMa
     {
         return new DefaultRemoteRepositoryManager();
     }
+
+    public void init()
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

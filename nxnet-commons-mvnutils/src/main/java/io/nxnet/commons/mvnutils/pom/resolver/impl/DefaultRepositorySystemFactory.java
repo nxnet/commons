@@ -55,8 +55,12 @@ public class DefaultRepositorySystemFactory implements RepositorySystemFactory
     
     public DefaultRepositorySystemFactory()
     {
-        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().
-                getService(RemoteRepositoryManagerFactory.class);
+        this.remoteRepositoryManagerFactory = new DefaultRemoteRepositoryManagerFactory();
+    }
+
+    public void init()
+    {
+        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
     }
     
     public RepositorySystem getRepositorySystem()

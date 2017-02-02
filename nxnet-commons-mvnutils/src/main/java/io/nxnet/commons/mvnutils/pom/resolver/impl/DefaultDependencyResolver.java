@@ -34,6 +34,13 @@ public class DefaultDependencyResolver implements DependencyResolver
     
     public DefaultDependencyResolver()
     {
+        this.repositorySystemFactory = new DefaultRepositorySystemFactory();
+        this.repositorySystemSessionFactory = new DefaultRepositorySystemSessionFactory();
+        this.remoteRepositoryFactory = new CentralRemoteRepositoryFactory();
+    }
+    
+    public void init()
+    {
         this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
         this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
         this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);

@@ -39,6 +39,15 @@ public class DefaultModelFactory implements ModelFactory
     
     public DefaultModelFactory()
     {   
+        this.dependencyResolver = new DefaultDependencyResolver();
+        this.repositorySystemFactory = new DefaultRepositorySystemFactory();
+        this.repositorySystemSessionFactory = new DefaultRepositorySystemSessionFactory();
+        this.remoteRepositoryFactory = new CentralRemoteRepositoryFactory();
+        this.remoteRepositoryManagerFactory = new DefaultRemoteRepositoryManagerFactory();
+    }
+
+    public void init()
+    {   
         this.dependencyResolver = ServiceLocator.getInstance().getService(DependencyResolver.class);
         this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
         this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);

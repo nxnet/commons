@@ -46,6 +46,13 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
     
     public DefaultRepositorySystemSessionFactory()
     {
+        this.repositorySystemFactory = new DefaultRepositorySystemFactory();
+        this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
+        this.localRepositoryFactory = new DefaultLocalRepositoryFactory();
+    }
+
+    public void init()
+    {
         this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
         this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
         this.localRepositoryFactory = ServiceLocator.getInstance().getService(LocalRepositoryFactory.class);

@@ -8,16 +8,18 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import io.nxnet.commons.mvnutils.pom.resolver.impl.DefaultModelFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class DefaultModelFactoryTest
 {
-    DefaultModelFactory modelFactory;
+    ModelFactory modelFactory;
 
     @Before
     public void setUp()
     {
-        this.modelFactory = new DefaultModelFactory();
+        //this.modelFactory = new DefaultModelFactory();
+        this.modelFactory = ServiceLocator.getInstance().getService(ModelFactory.class);
     }
 
     @Test

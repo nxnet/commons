@@ -13,6 +13,11 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
     
     public CentralRemoteRepositoryFactory()
     {
+        this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
+    }
+
+    public void init()
+    {
         this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
     }
     

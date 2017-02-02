@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
+import io.nxnet.commons.mvnutils.pom.resolver.Initializable;
 import io.nxnet.commons.mvnutils.pom.resolver.LocalRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
@@ -15,11 +16,24 @@ import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class DefaultServiceLocator extends ServiceLocator
 {
-    private static final Map<Class<?>, Object> services = initServices();
+    private Map<Class<?>, Initializable> services;
+    
+    private boolean servicesInitialized = false;
 
     @Override
     public <S> S getService(Class<S> clazz)
     {
+        if (this.services == null)
+        {
+            this.services = this.getServices();
+        }
+        
+        if (!this.servicesInitialized)
+        {
+            this.servicesInitialized = true;
+            this.initializeServices();
+        }
+        
         S service = (S)services.get(clazz);
         if (service == null)
         {
@@ -29,9 +43,9 @@ public class DefaultServiceLocator extends ServiceLocator
         return service;
     }
 
-    private static Map<Class<?>, Object> initServices()
+    private Map<Class<?>, Initializable> getServices()
     {
-        Map<Class<?>, Object> services = new HashMap<Class<?>, Object>();
+        Map<Class<?>, Initializable> services = new HashMap<Class<?>, Initializable>();
         services.put(DependencyResolver.class, new DefaultDependencyResolver());
         services.put(LocalRepositoryFactory.class, new DefaultLocalRepositoryFactory());
         services.put(ModelFactory.class, new DefaultModelFactory());
@@ -42,5 +56,13 @@ public class DefaultServiceLocator extends ServiceLocator
         services.put(RepositorySystemSessionFactory.class, new DefaultRepositorySystemSessionFactory());
         
         return services;
+    }
+
+    private void initializeServices()
+    {
+        for (Initializable service : services.values())
+        {
+            service.init();
+        }
     }
 }

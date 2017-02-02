@@ -29,7 +29,9 @@ public class PocTest
     
     public PocTest()
     {
-     
+        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
     }
 
     @Test
