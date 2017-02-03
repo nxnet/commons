@@ -8,7 +8,7 @@ public class NullProxyDefinitionFactory implements ProxyDefinitionFactory
 {
     public ProxyDefinition getProxyDefinition()
     {
-        return new ProxyDefinition();
+        return null;
     }
 
     public void init(ServiceRegistry serviceLocator)

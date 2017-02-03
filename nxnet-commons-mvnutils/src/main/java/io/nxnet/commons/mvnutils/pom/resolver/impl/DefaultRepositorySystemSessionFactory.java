@@ -119,10 +119,13 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
         // session.setDependencyGraphTransformer( null );
         
         // Proxy selector
-        DefaultProxySelector proxySelector = new DefaultProxySelector();
         ProxyDefinition proxyDefinition = this.proxyDefinitionFactory.getProxyDefinition();
-        proxySelector.add(proxyDefinition.getProxy(), proxyDefinition.getNonProxyHosts());
-        session.setProxySelector(proxySelector);
+        if (proxyDefinition != null)
+        {
+            DefaultProxySelector proxySelector = new DefaultProxySelector();
+            proxySelector.add(proxyDefinition.getProxy(), proxyDefinition.getNonProxyHosts());
+            session.setProxySelector(proxySelector);
+        }
 
         return session;
     }
