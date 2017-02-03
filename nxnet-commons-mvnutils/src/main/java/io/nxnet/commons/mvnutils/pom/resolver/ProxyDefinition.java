@@ -8,6 +8,8 @@ public class ProxyDefinition
     
     private String nonProxyHosts;
 
+    public ProxyDefinition() {}
+
     public ProxyDefinition(String type, String host, int port, String nonProxyHosts)
     {
         this.proxy = new Proxy(type, host, port);

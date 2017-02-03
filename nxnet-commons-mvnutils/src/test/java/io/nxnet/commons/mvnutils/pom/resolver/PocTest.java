@@ -74,7 +74,7 @@ public class PocTest
 
         // Artifact
         Artifact artifact = new DefaultArtifact(
-                "hr.ericsson.m2mse.security:m2mse-security-rest-impl:pom:3.1.0-SNAPSHOT");
+                "io.nxnet.commons:nxnet-commons-mvnutils:pom:0.1.0-RC8");
 
         // Remote repositories
         List<RemoteRepository> remoteRepositories = Arrays.asList(this.remoteRepositoryFactory.getRemoteRepository());

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import io.nxnet.commons.mvnutils.pom.resolver.Initializable;
 import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
 
 public class ServiceLoaderServiceLocator extends ServiceLocator
@@ -66,5 +67,11 @@ public class ServiceLoaderServiceLocator extends ServiceLocator
             factories.add(factoryIterator.next());
         }
         return factories;
+    }
+
+    @Override
+    public <S> void registerService(Class<S> clazz, Initializable service)
+    {
+        throw new UnsupportedOperationException();
     }
 }

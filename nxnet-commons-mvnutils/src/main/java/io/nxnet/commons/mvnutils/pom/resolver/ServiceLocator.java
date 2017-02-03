@@ -21,6 +21,8 @@ public abstract class ServiceLocator
     
     public abstract <S> S getService(Class<S> clazz);
     
+    public abstract <S> void registerService(Class<S> clazz, Initializable service);
+    
     private static synchronized ServiceLocator findLocator()
     {
         ServiceLoader<ServiceLocator> loader = ServiceLoader.load(ServiceLocator.class);

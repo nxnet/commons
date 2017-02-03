@@ -1,6 +1,5 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
@@ -19,15 +18,27 @@ public class DefaultServiceLocator extends ServiceLocator
     private Map<Class<?>, Initializable> services;
     
     private boolean servicesInitialized = false;
+    
+    public DefaultServiceLocator()
+    {
+        services.put(DependencyResolver.class, new DefaultDependencyResolver());
+        services.put(LocalRepositoryFactory.class, new DefaultLocalRepositoryFactory());
+        services.put(ModelFactory.class, new DefaultModelFactory());
+        services.put(ProxyDefinitionFactory.class, new NullProxyDefinitionFactory());
+        services.put(RemoteRepositoryFactory.class, new CentralRemoteRepositoryFactory());
+        services.put(RemoteRepositoryManagerFactory.class, new DefaultRemoteRepositoryManagerFactory());
+        services.put(RepositorySystemFactory.class, new DefaultRepositorySystemFactory());
+        services.put(RepositorySystemSessionFactory.class, new DefaultRepositorySystemSessionFactory());
+    }
 
+    @Override
+    public <S> void registerService(Class<S> clazz, Initializable service)
+    {
+        services.put(clazz, service);
+    }
     @Override
     public <S> S getService(Class<S> clazz)
     {
-        if (this.services == null)
-        {
-            this.services = this.getServices();
-        }
-        
         if (!this.servicesInitialized)
         {
             this.servicesInitialized = true;
@@ -43,21 +54,6 @@ public class DefaultServiceLocator extends ServiceLocator
         return service;
     }
 
-    private Map<Class<?>, Initializable> getServices()
-    {
-        Map<Class<?>, Initializable> services = new HashMap<Class<?>, Initializable>();
-        services.put(DependencyResolver.class, new DefaultDependencyResolver());
-        services.put(LocalRepositoryFactory.class, new DefaultLocalRepositoryFactory());
-        services.put(ModelFactory.class, new DefaultModelFactory());
-        services.put(ProxyDefinitionFactory.class, new LocalhostProxyDefinitionFactory());
-        services.put(RemoteRepositoryFactory.class, new EtkcRemoteRepositoryFactory());
-        services.put(RemoteRepositoryManagerFactory.class, new DefaultRemoteRepositoryManagerFactory());
-        services.put(RepositorySystemFactory.class, new DefaultRepositorySystemFactory());
-        services.put(RepositorySystemSessionFactory.class, new DefaultRepositorySystemSessionFactory());
-        
-        return services;
-    }
-
     private void initializeServices()
     {
         for (Initializable service : services.values())
@@ -65,4 +61,5 @@ public class DefaultServiceLocator extends ServiceLocator
             service.init();
         }
     }
+
 }
