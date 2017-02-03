@@ -21,7 +21,7 @@ import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 import io.nxnet.commons.mvnutils.pom.resolver.TreeNode;
 
 public class DefaultDependencyResolver implements DependencyResolver
@@ -39,11 +39,11 @@ public class DefaultDependencyResolver implements DependencyResolver
         this.remoteRepositoryFactory = new CentralRemoteRepositoryFactory();
     }
     
-    public void init()
+    public void init(ServiceRegistry serviceLocator)
     {
-        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
-        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
-        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
+        this.repositorySystemFactory = serviceLocator.getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = serviceLocator.getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = serviceLocator.getService(RemoteRepositoryFactory.class);
     }
 
     public TreeNode<Dependency> getDependencyTree(String artifactCoordinates) throws DependencyException

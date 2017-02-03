@@ -30,10 +30,10 @@ public class ModelResolverBuilderTest
     public void setUp()
     {
         this.modelResolverBuilder = new DefaultModelResolverBuilder();
-        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
-        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
-        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
-        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
+        this.repositorySystemFactory = ServiceRegistry.getInstance().getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = ServiceRegistry.getInstance().getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = ServiceRegistry.getInstance().getService(RemoteRepositoryFactory.class);
+        this.remoteRepositoryManagerFactory = ServiceRegistry.getInstance().getService(RemoteRepositoryManagerFactory.class);
     }
 
     @Test

@@ -34,7 +34,7 @@ import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultRepositorySystemSessionFactory implements RepositorySystemSessionFactory
 {
@@ -51,11 +51,11 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
         this.localRepositoryFactory = new DefaultLocalRepositoryFactory();
     }
 
-    public void init()
+    public void init(ServiceRegistry serviceLocator)
     {
-        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
-        this.proxyDefinitionFactory = ServiceLocator.getInstance().getService(ProxyDefinitionFactory.class);
-        this.localRepositoryFactory = ServiceLocator.getInstance().getService(LocalRepositoryFactory.class);
+        this.repositorySystemFactory = serviceLocator.getService(RepositorySystemFactory.class);
+        this.proxyDefinitionFactory = serviceLocator.getService(ProxyDefinitionFactory.class);
+        this.localRepositoryFactory = serviceLocator.getService(LocalRepositoryFactory.class);
     }
 
     public RepositorySystemSession getRepositorySystemSession()

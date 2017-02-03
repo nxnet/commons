@@ -23,7 +23,7 @@ import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultModelFactory implements ModelFactory
 {   
@@ -46,13 +46,13 @@ public class DefaultModelFactory implements ModelFactory
         this.remoteRepositoryManagerFactory = new DefaultRemoteRepositoryManagerFactory();
     }
 
-    public void init()
+    public void init(ServiceRegistry serviceLocator)
     {   
-        this.dependencyResolver = ServiceLocator.getInstance().getService(DependencyResolver.class);
-        this.repositorySystemFactory = ServiceLocator.getInstance().getService(RepositorySystemFactory.class);
-        this.repositorySystemSessionFactory = ServiceLocator.getInstance().getService(RepositorySystemSessionFactory.class);
-        this.remoteRepositoryFactory = ServiceLocator.getInstance().getService(RemoteRepositoryFactory.class);
-        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
+        this.dependencyResolver = serviceLocator.getService(DependencyResolver.class);
+        this.repositorySystemFactory = serviceLocator.getService(RepositorySystemFactory.class);
+        this.repositorySystemSessionFactory = serviceLocator.getService(RepositorySystemSessionFactory.class);
+        this.remoteRepositoryFactory = serviceLocator.getService(RemoteRepositoryFactory.class);
+        this.remoteRepositoryManagerFactory = serviceLocator.getService(RemoteRepositoryManagerFactory.class);
     }
 
     public Model getModel(File pom) throws ModelException

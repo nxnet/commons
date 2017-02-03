@@ -45,7 +45,7 @@ import org.eclipse.aether.transport.http.HttpTransporterFactory;
 
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultRepositorySystemFactory implements RepositorySystemFactory
 {
@@ -58,9 +58,9 @@ public class DefaultRepositorySystemFactory implements RepositorySystemFactory
         this.remoteRepositoryManagerFactory = new DefaultRemoteRepositoryManagerFactory();
     }
 
-    public void init()
+    public void init(ServiceRegistry serviceLocator)
     {
-        this.remoteRepositoryManagerFactory = ServiceLocator.getInstance().getService(RemoteRepositoryManagerFactory.class);
+        this.remoteRepositoryManagerFactory = serviceLocator.getService(RemoteRepositoryManagerFactory.class);
     }
     
     public RepositorySystem getRepositorySystem()

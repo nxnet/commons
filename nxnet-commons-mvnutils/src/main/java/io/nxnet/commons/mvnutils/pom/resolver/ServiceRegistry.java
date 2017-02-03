@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-public abstract class ServiceLocator
+public abstract class ServiceRegistry
 {
-    private static ServiceLocator _instance;
+    private static ServiceRegistry _instance;
 
-    public static ServiceLocator getInstance()
+    public static ServiceRegistry getInstance()
     {
         if (_instance == null)
         {
@@ -23,11 +23,11 @@ public abstract class ServiceLocator
     
     public abstract <S> void registerService(Class<S> clazz, Initializable service);
     
-    private static synchronized ServiceLocator findLocator()
+    private static synchronized ServiceRegistry findLocator()
     {
-        ServiceLoader<ServiceLocator> loader = ServiceLoader.load(ServiceLocator.class);
-        Iterator<ServiceLocator> locatorIter = loader.iterator();
-        List<ServiceLocator> locators = new ArrayList<ServiceLocator>();
+        ServiceLoader<ServiceRegistry> loader = ServiceLoader.load(ServiceRegistry.class);
+        Iterator<ServiceRegistry> locatorIter = loader.iterator();
+        List<ServiceRegistry> locators = new ArrayList<ServiceRegistry>();
         while (locatorIter.hasNext())
         {
             locators.add(locatorIter.next());
@@ -43,9 +43,9 @@ public abstract class ServiceLocator
         }
         else
         {
-            ServiceLocator locator = null;
+            ServiceRegistry locator = null;
             String locatorClassName = System.getProperty("nxnet.commons.mvnutils.service.locator");
-            for (ServiceLocator candidate : locators)
+            for (ServiceRegistry candidate : locators)
             {
                 if (candidate.getClass().getName().equals(locatorClassName))
                 {

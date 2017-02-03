@@ -1,5 +1,6 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
@@ -11,16 +12,17 @@ import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.RepositorySystemSessionFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
-public class DefaultServiceLocator extends ServiceLocator
+public class DefaultServiceRegistry extends ServiceRegistry
 {
     private Map<Class<?>, Initializable> services;
     
     private boolean servicesInitialized = false;
     
-    public DefaultServiceLocator()
+    public DefaultServiceRegistry()
     {
+        services = new HashMap<Class<?>, Initializable>();
         services.put(DependencyResolver.class, new DefaultDependencyResolver());
         services.put(LocalRepositoryFactory.class, new DefaultLocalRepositoryFactory());
         services.put(ModelFactory.class, new DefaultModelFactory());
@@ -58,7 +60,7 @@ public class DefaultServiceLocator extends ServiceLocator
     {
         for (Initializable service : services.values())
         {
-            service.init();
+            service.init(this);
         }
     }
 

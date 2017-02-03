@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.nxnet.commons.mvnutils.pom.resolver.Initializable;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
-public class ServiceLoaderServiceLocator extends ServiceLocator
+public class ServiceLoaderServiceRegistry extends ServiceRegistry
 {
     public <S> S getService(Class<S> clazz) 
     {

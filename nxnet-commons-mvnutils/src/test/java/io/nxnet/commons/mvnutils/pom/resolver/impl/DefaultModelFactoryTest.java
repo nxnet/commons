@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
-import io.nxnet.commons.mvnutils.pom.resolver.ServiceLocator;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultModelFactoryTest
 {
@@ -19,7 +19,7 @@ public class DefaultModelFactoryTest
     public void setUp()
     {
         //this.modelFactory = new DefaultModelFactory();
-        this.modelFactory = ServiceLocator.getInstance().getService(ModelFactory.class);
+        this.modelFactory = ServiceRegistry.getInstance().getService(ModelFactory.class);
     }
 
     @Test

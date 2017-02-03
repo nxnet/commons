@@ -4,6 +4,7 @@ import org.eclipse.aether.impl.RemoteRepositoryManager;
 import org.eclipse.aether.internal.impl.DefaultRemoteRepositoryManager;
 
 import io.nxnet.commons.mvnutils.pom.resolver.RemoteRepositoryManagerFactory;
+import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultRemoteRepositoryManagerFactory implements RemoteRepositoryManagerFactory
 {
@@ -24,7 +25,7 @@ public class DefaultRemoteRepositoryManagerFactory implements RemoteRepositoryMa
         return new DefaultRemoteRepositoryManager();
     }
 
-    public void init()
+    public void init(ServiceRegistry serviceLocator)
     {
         // TODO Auto-generated method stub
         
