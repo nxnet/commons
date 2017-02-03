@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.nxnet.commons.mvnutils.pom.resolver.DependencyResolver;
+import io.nxnet.commons.mvnutils.pom.resolver.DependencySelectorFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.Initializable;
 import io.nxnet.commons.mvnutils.pom.resolver.LocalRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
@@ -31,6 +32,7 @@ public class DefaultServiceRegistry extends ServiceRegistry
         services.put(RemoteRepositoryManagerFactory.class, new DefaultRemoteRepositoryManagerFactory());
         services.put(RepositorySystemFactory.class, new DefaultRepositorySystemFactory());
         services.put(RepositorySystemSessionFactory.class, new DefaultRepositorySystemSessionFactory());
+        services.put(DependencySelectorFactory.class, new DefaultDependencySelectorFactory());
     }
 
     @Override

@@ -239,7 +239,16 @@ public class TreeNodeImpl<E> implements TreeNode<E>
     @Override
     public String toString()
     {
-        return "TreeNodeImpl [element=" + element + "]";
+        //return "TreeNodeImpl [element=" + element + "]";
+        StringBuilder toStringBuilder = new StringBuilder()
+                .append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TreeNodeImpl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>").append("\n");
+        Iterator<TreeNode<E>> iter = this.iterator();
+        while (iter.hasNext())
+        {
+            toStringBuilder.append(iter.next().getElement()).append("\n");
+        }
+        toStringBuilder.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> TreeNodeImpl <<<<<<<<<<<<<<<<<<<<<<<<<<<<<").append("\n");
+        return toStringBuilder.toString();
     }
 
 }

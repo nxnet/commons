@@ -29,6 +29,7 @@ import org.eclipse.aether.util.graph.traverser.FatArtifactTraverser;
 import org.eclipse.aether.util.repository.DefaultProxySelector;
 import org.eclipse.aether.util.repository.SimpleArtifactDescriptorPolicy;
 
+import io.nxnet.commons.mvnutils.pom.resolver.DependencySelectorFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.LocalRepositoryFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
@@ -44,11 +45,14 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
     
     private LocalRepositoryFactory localRepositoryFactory;
     
+    private DependencySelectorFactory dependencySelectorFactory;
+    
     public DefaultRepositorySystemSessionFactory()
     {
         this.repositorySystemFactory = new DefaultRepositorySystemFactory();
         this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
         this.localRepositoryFactory = new DefaultLocalRepositoryFactory();
+        this.dependencySelectorFactory = new DefaultDependencySelectorFactory();
     }
 
     public void init(ServiceRegistry serviceLocator)
@@ -56,6 +60,7 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
         this.repositorySystemFactory = serviceLocator.getService(RepositorySystemFactory.class);
         this.proxyDefinitionFactory = serviceLocator.getService(ProxyDefinitionFactory.class);
         this.localRepositoryFactory = serviceLocator.getService(LocalRepositoryFactory.class);
+        this.dependencySelectorFactory = serviceLocator.getService(DependencySelectorFactory.class);
     }
 
     public RepositorySystemSession getRepositorySystemSession()
@@ -68,9 +73,7 @@ public class DefaultRepositorySystemSessionFactory implements RepositorySystemSe
         DependencyManager depManager = new ClassicDependencyManager();
         session.setDependencyManager( depManager );
 
-        DependencySelector depFilter =
-            new AndDependencySelector( new ScopeDependencySelector( "test", "provided" ),
-                                       new OptionalDependencySelector(), new ExclusionDependencySelector() );
+        DependencySelector depFilter = this.dependencySelectorFactory.getDependencySelector();
         session.setDependencySelector( depFilter );
 
         DependencyGraphTransformer transformer =
