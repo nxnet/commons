@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.nxnet.commons</groupId>
         <artifactId>nxnet-commons</artifactId>
-        <version>0.1.0-RC10-SNAPSHOT</version>
+        <version>0.1.0-RC10</version>
     </parent>
     
     <artifactId>nxnet-commons-mvnutils</artifactId>
