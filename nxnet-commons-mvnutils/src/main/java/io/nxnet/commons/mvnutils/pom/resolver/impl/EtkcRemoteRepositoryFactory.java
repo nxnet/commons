@@ -25,7 +25,7 @@ public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
     {
         // Set repo location
         RemoteRepository.Builder repositoryBuilder = new RemoteRepository.Builder(
-                "etkc", "default", "http://ehrzgux504.etk.extern.eu.ericsson.se/content/groups/parent/");
+                "etkc", "default", "http://172.17.67.250/content/groups/parent/");
         
         // Set repo proxy
         ProxyDefinition proxyDefinition = this.proxyDefinitionFactory.getProxyDefinition();
