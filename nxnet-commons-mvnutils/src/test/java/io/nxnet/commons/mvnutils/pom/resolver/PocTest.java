@@ -1,6 +1,5 @@
 package io.nxnet.commons.mvnutils.pom.resolver;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.aether.RepositorySystem;
@@ -43,11 +42,11 @@ public class PocTest
  
         Dependency dependency =
             new Dependency( new DefaultArtifact( "org.apache.maven:maven-profile:2.2.1" ), "compile" );
-        RemoteRepository central = this.remoteRepositoryFactory.getRemoteRepository();
+        List<RemoteRepository> central = this.remoteRepositoryFactory.getRemoteRepositories();
  
         CollectRequest collectRequest = new CollectRequest();
         collectRequest.setRoot( dependency );
-        collectRequest.addRepository( central );
+        collectRequest.setRepositories( central );
         DependencyNode node = repoSystem.collectDependencies( session, collectRequest ).getRoot();
  
         DependencyRequest dependencyRequest = new DependencyRequest();
@@ -77,7 +76,7 @@ public class PocTest
                 "io.nxnet.commons:nxnet-commons-mvnutils:pom:0.1.0-RC8");
 
         // Remote repositories
-        List<RemoteRepository> remoteRepositories = Arrays.asList(this.remoteRepositoryFactory.getRemoteRepository());
+        List<RemoteRepository> remoteRepositories = this.remoteRepositoryFactory.getRemoteRepositories();
         
         // Artifact request 
         ArtifactRequest artifactRequest = new ArtifactRequest();

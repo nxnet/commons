@@ -1,5 +1,8 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.aether.repository.RemoteRepository;
 
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
@@ -21,7 +24,7 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
         this.proxyDefinitionFactory = serviceLocator.getService(ProxyDefinitionFactory.class);
     }
     
-    public RemoteRepository getRemoteRepository()
+    public List<RemoteRepository> getRemoteRepositories()
     {
         // Set repo location
         RemoteRepository.Builder repositoryBuilder = new RemoteRepository.Builder(
@@ -34,7 +37,7 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
             repositoryBuilder.setProxy(proxyDefinition.getProxy());
         }
         
-        return repositoryBuilder.build();
+        return Arrays.asList(repositoryBuilder.build());
     }
 
     /**

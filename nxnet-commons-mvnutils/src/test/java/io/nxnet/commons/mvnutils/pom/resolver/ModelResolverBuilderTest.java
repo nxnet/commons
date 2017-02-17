@@ -42,7 +42,7 @@ public class ModelResolverBuilderTest
         ModelResolver modelResolver = this.modelResolverBuilder
             .setRepositorySystem(this.repositorySystemFactory.getRepositorySystem())
             .setRepositorySystemSession(this.repositorySystemSessionFactory.getRepositorySystemSession())
-            .addRemoteRepository(this.remoteRepositoryFactory.getRemoteRepository())
+            .setRemoteRepositories(this.remoteRepositoryFactory.getRemoteRepositories())
             .setRemoteRepositoryManager(this.remoteRepositoryManagerFactory.getRemoteRepositoryManager())
             .setRepositoryMerging(RepositoryMerging.REQUEST_DOMINANT)
             .setRequestTrace(new RequestTrace(null))

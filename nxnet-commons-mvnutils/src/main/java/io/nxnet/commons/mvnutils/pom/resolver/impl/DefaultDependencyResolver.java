@@ -1,6 +1,5 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
@@ -53,8 +52,8 @@ public class DefaultDependencyResolver implements DependencyResolver
         RepositorySystemSession session = this.repositorySystemSessionFactory.getRepositorySystemSession();
 
         // Remote repositories
-        List<RemoteRepository> remoteRepositories = Arrays.asList(
-                this.remoteRepositoryFactory.getRemoteRepository());
+        List<RemoteRepository> remoteRepositories = this
+                .remoteRepositoryFactory.getRemoteRepositories();
         
         // Artifact
         Artifact artifact = new DefaultArtifact(artifactCoordinates);

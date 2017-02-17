@@ -1,6 +1,7 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.maven.model.building.DefaultModelBuilder;
 import org.apache.maven.model.building.DefaultModelBuilderFactory;
@@ -63,8 +64,8 @@ public class DefaultModelFactory implements ModelFactory
         RepositorySystemSession repositorySystemSession = this.repositorySystemSessionFactory
                 .getRepositorySystemSession();
         
-        RemoteRepository remoteRepository = this.remoteRepositoryFactory
-                .getRemoteRepository();
+        List<RemoteRepository> remoteRepositories = this.remoteRepositoryFactory
+                .getRemoteRepositories();
         
         RemoteRepositoryManager remoteRepositoryManager = this.remoteRepositoryManagerFactory
                 .getRemoteRepositoryManager();
@@ -73,7 +74,7 @@ public class DefaultModelFactory implements ModelFactory
         ModelResolver modelResolver = new DefaultModelResolverBuilder()
                 .setRepositorySystem(repositorySystem)
                 .setRepositorySystemSession(repositorySystemSession)
-                .addRemoteRepository(remoteRepository)
+                .setRemoteRepositories(remoteRepositories)
                 .setRemoteRepositoryManager(remoteRepositoryManager)
                 .setRepositoryMerging(RepositoryMerging.REQUEST_DOMINANT)
                 .setRequestTrace(new RequestTrace(null))
