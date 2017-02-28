@@ -19,11 +19,17 @@ public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
         this.proxyDefinitionFactory = new LocalhostProxyDefinitionFactory();
     }
 
+    public EtkcRemoteRepositoryFactory(ProxyDefinitionFactory proxyDefinitionFactory)
+    {
+        this.proxyDefinitionFactory = proxyDefinitionFactory;
+    }
+
     public void init(ServiceRegistry serviceLocator)
     {
         this.proxyDefinitionFactory = serviceLocator.getService(ProxyDefinitionFactory.class);
     }
     
+    @Override
     public List<RemoteRepository> getRemoteRepositories()
     {
         // Set repo location
@@ -38,6 +44,22 @@ public class EtkcRemoteRepositoryFactory implements RemoteRepositoryFactory
         }
         
         return Arrays.asList(repositoryBuilder.build());
+    }
+
+    /**
+     * @return the proxyDefinitionFactory
+     */
+    public ProxyDefinitionFactory getProxyDefinitionFactory()
+    {
+        return proxyDefinitionFactory;
+    }
+
+    /**
+     * @param proxyDefinitionFactory the proxyDefinitionFactory to set
+     */
+    public void setProxyDefinitionFactory(ProxyDefinitionFactory proxyDefinitionFactory)
+    {
+        this.proxyDefinitionFactory = proxyDefinitionFactory;
     }
 
 }

@@ -6,6 +6,7 @@ import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class LocalhostProxyDefinitionFactory implements ProxyDefinitionFactory
 {
+    @Override
     public ProxyDefinition getProxyDefinition()
     {
         return new ProxyDefinition("http", "localhost", 3128, "localhost|127.0.0.1");
