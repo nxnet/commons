@@ -122,7 +122,8 @@ public class TreeNodeImpl<E> implements TreeNode<E>
      */
     public int getPosition()
     {
-        return this.getSiblings().indexOf(this);
+        List<TreeNode<E>> siblings = this.getSiblings();
+        return siblings != null && !siblings.isEmpty() ? siblings.indexOf(this) : 0;
     }
 
     public Iterator<TreeNode<E>> iterator()
