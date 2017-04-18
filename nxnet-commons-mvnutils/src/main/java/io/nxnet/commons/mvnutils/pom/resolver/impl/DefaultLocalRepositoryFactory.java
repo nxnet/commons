@@ -7,9 +7,16 @@ import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 
 public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
 {
+    private String localRepoPath;
+    
+    public DefaultLocalRepositoryFactory()
+    {
+        this.localRepoPath = System.getProperty("user.home") + "/.m2/repository";
+    }
+    
     public LocalRepository getLocalRepository()
     {
-        return new LocalRepository("target/local-repo");
+        return new LocalRepository(this.localRepoPath);
     }
 
     public void init(ServiceRegistry serviceLocator)
@@ -17,4 +24,21 @@ public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
         // TODO Auto-generated method stub
         
     }
+
+    /**
+     * @return the localRepoPath
+     */
+    public String getLocalRepoPath()
+    {
+        return localRepoPath;
+    }
+
+    /**
+     * @param localRepoPath the localRepoPath to set
+     */
+    public void setLocalRepoPath(String localRepoPath)
+    {
+        this.localRepoPath = localRepoPath;
+    }
+    
 }

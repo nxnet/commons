@@ -1,8 +1,10 @@
 package io.nxnet.commons.mvnutils.pom.resolver.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import io.nxnet.commons.mvnutils.pom.resolver.TreeNode;
 
@@ -120,13 +122,7 @@ public class TreeNodeImpl<E> implements TreeNode<E>
      */
     public int getPosition()
     {
-        int position = 0;
-        TreeNode<E> parentNode = this.getParentNode();
-        if (parentNode != null)
-        {
-            position = parentNode.getChildNodes().indexOf(this);
-        }
-        return position;
+        return this.getSiblings().indexOf(this);
     }
 
     public Iterator<TreeNode<E>> iterator()
@@ -239,16 +235,111 @@ public class TreeNodeImpl<E> implements TreeNode<E>
     @Override
     public String toString()
     {
-        //return "TreeNodeImpl [element=" + element + "]";
-        StringBuilder toStringBuilder = new StringBuilder()
-                .append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TreeNodeImpl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>").append("\n");
+        StringBuilder toStringBuilder = new StringBuilder();
+        int longestLineSize = 0;
+        
+        Stack<String> prefixes = new Stack<>();
+        TreeNode<E> node = null;
         Iterator<TreeNode<E>> iter = this.iterator();
         while (iter.hasNext())
         {
-            toStringBuilder.append(iter.next().getElement()).append("\n");
+            // Extract nodes
+            node = iter.next();
+            
+            // Calculate node prefix
+            adjustPrefixes(prefixes, node);
+            
+            // Compose node print line
+            int lineSize = 0;
+            String nodeString = node.getElement().toString();
+            for (String prefix : prefixes)
+            {
+                toStringBuilder.append(prefix);
+                lineSize = lineSize + prefix.length(); 
+            }
+            toStringBuilder.append(node.isLastSibling() ? "\\- " : "+- ");
+            lineSize = lineSize + 3;
+            toStringBuilder.append(nodeString);
+            lineSize = lineSize + nodeString.length();
+            toStringBuilder.append("\n");
+            
+            // Memorize longest line size
+            if (lineSize > longestLineSize)
+            {
+                longestLineSize = lineSize;
+            }
         }
-        toStringBuilder.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> TreeNodeImpl <<<<<<<<<<<<<<<<<<<<<<<<<<<<<").append("\n");
+        
+        // Set header and footer
+        String prefix = "*";
+        String sufix = "*";
+        String token = "*";
+        String headerText = prefix + " Tree node: " + this.getElement() + " " + sufix;
+        if (headerText.length() > longestLineSize)
+        {
+            // recalculate longest line once again because of header text
+            longestLineSize = headerText.length();
+        }
+        else
+        {
+            // rewrite header text
+            headerText = headerText.substring(0, headerText.length() - sufix.length()) 
+                    + repeat(" ", longestLineSize - headerText.length()) + sufix;
+        }
+        String lineDelimiter = prefix 
+                + repeat(token, longestLineSize - (prefix.length() + sufix.length())) + sufix +"\n";
+        toStringBuilder.insert(0, lineDelimiter + headerText + "\n" + lineDelimiter);
+        toStringBuilder.append(lineDelimiter);
+        
         return toStringBuilder.toString();
+    }
+
+    @Override
+    public boolean isLastSibling()
+    {
+        return (this.getPosition() == (this.getSiblings().size() - 1));
+    }
+
+    @Override
+    public List<TreeNode<E>> getSiblings()
+    {
+        List<TreeNode<E>> siblings = new ArrayList<>();
+        if (this.getParentNode() != null)
+        {
+            siblings.addAll(this.getParentNode().getChildNodes());
+        }
+        return siblings;
+    }
+
+    private String repeat(String s, int n)
+    {
+        return new String(new char[n]).replace("\0", s);
+    }
+    
+    private void adjustPrefixes(Stack<String> prefixes, TreeNode<E> node)
+    {
+        if (prefixes.size() < node.getLevel()) // We have less prefixes than required by node level
+        {
+            if (node.getParentNode() != null && node.getParentNode().isLastSibling())
+            {
+                prefixes.push("   ");
+            }
+            else
+            {
+                prefixes.push("|  ");
+            }
+            adjustPrefixes(prefixes, node);
+        }
+        else if (prefixes.size() > node.getLevel()) // We have more prefixes than required by node level
+        {
+            prefixes.pop();
+            adjustPrefixes(prefixes, node);
+        }
+        else // Number of prefixes matches node level
+        {
+            // Prefixes are adjusted, return
+            return;
+        }
     }
 
 }

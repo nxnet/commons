@@ -26,7 +26,7 @@
         <connection>scm:git:http://github.com/nxnet/nxnet-commons.git</connection>
         <developerConnection>scm:git:https://github.com/nxnet/nxnet-commons.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>
@@ -100,6 +100,10 @@
         <version-maven-gpg-plugin>1.6</version-maven-gpg-plugin>
         <version-maven-release-plugin>2.5.3</version-maven-release-plugin>
         <version-nexus-staging-maven-plugin>1.6.7</version-nexus-staging-maven-plugin>
+        
+        <project-property>foo</project-property>
+        <project-property-override>bar</project-property-override>
+        
     </properties>
 
     <profiles>

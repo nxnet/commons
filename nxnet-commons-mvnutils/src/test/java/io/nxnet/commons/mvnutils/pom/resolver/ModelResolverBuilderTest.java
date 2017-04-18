@@ -49,7 +49,7 @@ public class ModelResolverBuilderTest
             .build();
         
         DefaultModelBuildingRequest modelBuildingRequest = new DefaultModelBuildingRequest();
-        modelBuildingRequest.setPomFile(new File("src/test/resources/pom.xml"));
+        modelBuildingRequest.setPomFile(new File("pom.xml"));
         modelBuildingRequest.setModelResolver(modelResolver);
         modelBuildingRequest.setSystemProperties(System.getProperties());
         

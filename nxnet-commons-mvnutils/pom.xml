@@ -71,11 +71,6 @@
             <artifactId>aether-transport-http</artifactId>
             <version>1.1.0</version>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-demo-snippets</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency> -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -88,4 +83,7 @@
         </dependency>
     </dependencies>
     
+    <properties>
+        <project-property-override>baz</project-property-override>
+    </properties>
 </project>

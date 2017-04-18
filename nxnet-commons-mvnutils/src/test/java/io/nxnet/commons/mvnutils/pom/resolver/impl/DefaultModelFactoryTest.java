@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import io.nxnet.commons.mvnutils.pom.resolver.ModelFactory;
 import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
@@ -25,9 +26,9 @@ public class DefaultModelFactoryTest
     @Test
     public void getModel() throws Exception
     {
-        Model model = this.modelFactory.getModel(new File("src/test/resources/pom.xml"));
-        assertEquals("foo", model.getProperties().get("myprop"));
-        //assertEquals("bar", model.getProperties().get("prop-security"));
+        Model model = this.modelFactory.getModel(new File("pom.xml"));
+        assertEquals("foo", model.getProperties().get("project-property"));
+        assertEquals("baz", model.getProperties().get("project-property-override"));
         System.out.println(model.getProperties());
     }
 }

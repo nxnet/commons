@@ -16,4 +16,8 @@ public interface TreeNode<E>
     int getLevel();
     
     int getPosition();
+    
+    List<TreeNode<E>> getSiblings();
+    
+    boolean isLastSibling();
 }

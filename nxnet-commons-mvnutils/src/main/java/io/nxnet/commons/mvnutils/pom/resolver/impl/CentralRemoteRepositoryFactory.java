@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
 
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinition;
 import io.nxnet.commons.mvnutils.pom.resolver.ProxyDefinitionFactory;
@@ -35,6 +36,8 @@ public class CentralRemoteRepositoryFactory implements RemoteRepositoryFactory
         // Set repo location
         RemoteRepository.Builder repositoryBuilder = new RemoteRepository.Builder(
                 "central", "default", "http://central.maven.org/maven2/");
+        repositoryBuilder.setSnapshotPolicy(new RepositoryPolicy(false, RepositoryPolicy.UPDATE_POLICY_NEVER, 
+                RepositoryPolicy.CHECKSUM_POLICY_WARN));
         
         // Set repo proxy
         ProxyDefinition proxyDefinition = this.proxyDefinitionFactory.getProxyDefinition();
