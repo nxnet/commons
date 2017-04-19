@@ -11,7 +11,7 @@ public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
     
     public DefaultLocalRepositoryFactory()
     {
-        this.localRepoPath = System.getProperty("user.home") + "/.m2/repository";
+        this.localRepoPath = System.getProperty("java.io.tmpdir") + "/.m2/repository";
     }
     
     public LocalRepository getLocalRepository()
