@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Set up  Git <-> SVN sync infrastructure
+#
+
+#==================
+# Script arguments
+#==================
+declare repo_name="${1:?repo name argument missing}"
+declare default_branch="${2:-svn/trunk}"
+
+#====================
+# Derived parameters
+#====================
+declare svn_repo_url="file:///srv/svn/m2mse/${repo_name}"
+declare gsb_repo_path="/srv/gsb/${repo_name}.gsb"
+declare git_repo_path="/srv/git/${repo_name}.git"
+declare git_repo_url="file://${git_repo_path}"
+
+#====================
+# Execute script job
+#====================
+
+# Create repos
+git svn clone -s --prefix=svn-repo/svn/ --svn-remote svn-repo --no-minimize-url "${svn_repo_url}" "${gsb_repo_path}"
+git init --bare "${git_repo_path}"
+cd "${gsb_repo_path}"
+git push --all "${git_repo_path}"
+git push "${git_repo_path}" 'refs/remotes/svn-repo/*:refs/heads/*'
+git remote add git-mirror "${git_repo_url}"
+git fetch --all
+
+# Change default branch for git mirror
+cd "${git_repo_path}"
+git symbolic-ref HEAD "refs/heads/${default_branch}"
+
+# Copy hooks
+cp -a /srv/gsb/scripts/hooks/git/post-receive "${git_repo_path}/hooks/post-receive" && sed -i -e "s/\${REPO_NAME}/${repo_name}/g" "${git_repo_path}/hooks/post-receive"
+cp -a /srv/gsb/scripts/hooks/git/prepare-commit-msg "${gsb_repo_path}/.git/hooks/prepare-commit-msg" && sed -i -e "s/\${REPO_NAME}/${repo_name}/g" "${gsb_repo_path}/.git/hooks/prepare-commit-msg"
+
+# Set git user as owner of files in repos
+sudo chown -R git:git "${gsb_repo_path}" && sudo chmod -R 775 "${gsb_repo_path}" && sudo chmod -R g+s "${gsb_repo_path}"
+sudo chown -R git:git "${git_repo_path}" && sudo chmod -R 775 "${git_repo_path}" && sudo chmod -R g+s "${git_repo_path}"
+

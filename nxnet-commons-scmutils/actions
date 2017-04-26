@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+#
+# Flow control functions
+#
+###########################
+
+#=======================================
+# Script arguments and global variables
+#=======================================
+
+# Stack of messages
+declare __messages=${__MESSAGES:-()}
+
+# Message prefix
+declare __prefix=${__PREFIX:-}
+
+# Default lock file name
+declare __lockfile="${__LOCKFILE:-/tmp/$(uuidgen)}"
+
+declare __no_format="${__NO_FORMAT:-0}"
+
+#=============================
+# Script functions goes below
+#=============================
+
+# Print action message
+action()
+{
+  declare message="${1:-}"
+  declare format="${2:-\e[34m}"
+
+  declare format_reset="\e[0m"
+  declare prefix="${__prefix}"
+  declare level="$(head -c $((${#__messages[@]} - 1)) < /dev/zero | sed -r 's/./   /g')+-"
+
+  # Disable formatting feature
+  if ((__no_format)) ; then
+     format=''
+     format_reset=''
+  fi
+
+  # Push message to stack
+  __messages=("${__messages[@]}" "${message}")
+
+  # Print message
+  echo -e ">>> ${level}${prefix}${format}${message}...${format_reset}"
+}
+
+_outcome()
+{
+  declare operation="${1:-ok}"
+  declare comment="${2:-}"
+  declare format="${3:-\e[39m}"
+
+  declare format_reset="\e[0m"
+  declare prefix="${__prefix}"
+  declare level="$(head -c $((${#__messages[@]} - 2)) < /dev/zero | sed -r 's/./   /g')\-"
+
+  # Disable formatting feature
+  if ((__no_format)) ; then
+     format=''
+     format_reset=''
+  fi
+
+  # Read message from stack
+  [[ ${#__messages[@]} -gt 1 ]] && declare message="${__messages[-1]}"
+  # Pop message from stack
+  [[ ${#__messages[@]} -gt 1 ]] && unset '__messages[${#__messages[@]}-1]'
+
+  # Set message
+  msg_left="<<< ${level}${prefix}${format}${message}... "
+  msg_right=" ${comment}${format_reset}"
+  if [[ "${operation}" == "ok" ]] ; then
+    status='OK!'
+  elif [[ "${operation}" == "info" ]] ; then
+    status='Info:'
+  elif [[ "${operation}" == "warning" ]] ; then
+    status='Warning:'
+  elif [[ "${operation}" == "failure" ]] ; then
+    status='Failure:'
+  elif [[ "${operation}" == "error" ]] ; then
+    status='Error:'
+  else
+    echo "Unsupported operation: ${operation}!"
+  fi
+
+  # Print message
+  echo -e "${msg_left}${status}${msg_right}"
+
+  # End if needed
+  if [[ "${operation}" == "failure" ]] ; then
+    # Print footer and exit
+    end "Sync stopped because of failures."
+  elif [[ "${operation}" == "error" ]] ; then
+    # Print footer and exit
+    end "Sync stopped because of errors."
+  fi
+}
+
+# Print when action finishes successfully
+ok()
+{
+  declare comment="${1:-}"
+  declare color="${2:-\e[32m}"
+  _outcome "ok" "${comment}" "${color}"
+}
+
+# Print action info message
+info()
+{
+  declare comment="${1:-}"
+  declare color="${2:-\e[32m}"
+  _outcome "info" "${comment}" "${color}"
+}
+
+# Print action warning message
+warning()
+{
+  declare comment="${1:-}"
+  declare color="${2:-\e[33m}"
+  _outcome "warning" "${comment}" "${color}"
+}
+
+# Print action failure message and exit
+failure()
+{
+  declare comment="${1:-}"
+  declare color="${2:-\e[31m}"
+  _outcome "failure" "${comment}" "${color}"
+  exit 1
+}
+
+# Print action error message and exit
+error()
+{
+  declare comment="${1:-}"
+  declare color="${2:-\e[32m}"
+  _outcome "error" "${comment}" "${color}"
+  exit 1
+}
+
+# Print script header
+start()
+{
+  declare message="${1:-}"
+  declare lockfile="${2:-${__lockfile}}"
+  # Aquire lock to avoid race condition
+  echo "Creating lock file ${lockfile}"
+  lockfile-create -r 0 "${lockfile}" || exit 1
+  # Print header
+  echo ">>> ---------------------------------------------------------------------"
+  echo ">>>  ${__prefix}${message}"
+  echo ">>> ---------------------------------------------------------------------"
+}
+
+# Print script footer and exit
+end()
+{
+  declare message="${1:-}"
+  declare lockfile="${2:-${__lockfile}}"
+  # Print footer
+  echo "<<< --------------------------------------------------------------------"
+  echo "<<<  ${__prefix}${message}"
+  echo "<<< --------------------------------------------------------------------"
+  # Release lock
+  echo "Releasing lock file ${lockfile}"
+  lockfile-remove "${lockfile}"
+}
+
+

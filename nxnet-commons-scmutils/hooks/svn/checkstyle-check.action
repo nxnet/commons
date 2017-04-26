@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# Make sure that the commiting files conform to checkstyle definitions
+#
+
+# Script args definition
+declare __svn_repository="${1:?Svn repository argument undefined}"
+declare __svn_revision="${2:?Svn revision argument undefined}"
+
+declare __checkstyle_jar="/home/www-data/.checkstyle/checkstyle-7.6-all.jar" # path to checkstyle jar file
+declare __checkstyle_cfg="/home/www-data/.checkstyle/etkc-conventions-2.2.0-RC1-checkstyle-ansi.xml" #path to checkstyle definitions file
+declare __checkstyle_tmp="/var/tmp/svn${__svn_repository}/${__svn_revision}" # tmp folder used by checkstyle hook
+declare __checkstyle_src="${__checkstyle_tmp}/checkstyle" # tmp folder for saving commiting source files
+declare __checkstyle_rpt="${__checkstyle_tmp}/checkstyle.report" # checkstyle report file
+
+#
+# Create checkstyle workspace
+#
+mkdir -p "${__checkstyle_tmp}"
+
+#
+# Copy files in commit transaction in temporary location
+#
+declare __changed_paths="$(svnlook changed -t ${__svn_revision} ${__svn_repository} | grep -v '^D'| awk '{print $2}')"
+for __changed_path in ${__changed_paths} ; do
+
+     echo "> Checkstyle action detects change on path: ${__changed_path}" #>&2
+     #
+     # If it is a file and not directory and start with m2mse/ meaning that is m2mse project file
+     #
+     if ( echo "${__changed_path}" | grep -v "/$" | grep "^m2mse/" ); then
+
+         declare __tmp_source_file="${__checkstyle_src}/${__changed_path}"
+         declare __tmp_source_dir="$(dirname ${__tmp_source_file})"
+
+         #
+         # Create full dir path for temporary source file
+         #
+         echo "> Checkstyle action creates dir: ${__tmp_source_dir}" #>&2
+         mkdir -p "${__tmp_source_dir}"
+
+         #
+         # Write temporary source file
+         #
+         echo "> Checkstyle action creates file: ${__tmp_source_file}" #>&2
+         svnlook cat "${__svn_repository}" -t "${__svn_revision}" "${__changed_path}" > "${__tmp_source_file}"
+     else
+         #
+         # Ignore directories
+         #
+         echo "> Checkstyle action ignores path: ${__changed_path}" #>&2
+     fi
+done
+
+#
+# Do checks and create checkstyle report
+#
+java -jar "${__checkstyle_jar}" -c "${__checkstyle_cfg}" -o "${__checkstyle_rpt}" "${__checkstyle_src}/" || true
+declare __checkstyle_regex="^\[ERROR\]"
+if( cat "${__checkstyle_rpt}" | grep "${__checkstyle_regex}" ); then
+
+   echo "/==================================\\" >&2
+   echo "| > Checkstyle Error(s) " >&2
+   echo "+==================================+" >&2
+   cat "${__checkstyle_rpt}" | grep "${__checkstyle_regex}" | sed -e "s@${__checkstyle_src}/@@" >&2
+   echo "+==================================+" >&2
+   echo "| > Commiting source code doesn't pass checkstyle checks." >&2
+   echo "| > Please refactor your source code to conform to established syntax rules and try commit again." >&2
+   echo "\\==================================/" >&2
+
+   #
+   # Checkstyle checks didn't pass
+   #
+   exit 1
+else
+   #
+   # All checks passed, so remove checkstyle workspace
+   #
+   echo "> Checkstyle action checks are OK, removing workspace dir ${__checkstyle_tmp}" #>&2
+   rm -Rf "${__checkstyle_tmp}"
+fi

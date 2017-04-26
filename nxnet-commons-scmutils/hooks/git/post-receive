@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-update".
+
+#
+# magic variables
+#
+declare repo_name="${REPO_NAME}"
+declare repo_url="ssh://jenkins@ehrzgux505.etk.extern.eu.ericsson.se/srv/git/${repo_name}.git"
+declare jenkins_url="https://ehrzgux506.etk.extern.eu.ericsson.se/git/notifyCommit"
+
+#
+# Read hook arguments
+#
+read oldrev newrev refname
+
+#
+# Derived arguments
+#
+declare branch="${refname#refs/heads/}"
+declare user="$(whoami)"
+
+#
+# Sync with SVN repo
+#
+if [[ "${user}" != "jenkins" ]] ; then
+   bash "/srv/gsb/scripts/hooks/git/git2svn.action" "${repo_name}" "${branch}"
+fi
+
+#
+# Notify build tool
+#
+if [[ "${user}" != "jenkins" ]] ; then
+   curl -k "${jenkins_url}"?url="${repo_url}"&branches="${branch}"&sha1="${newrev}"
+fi

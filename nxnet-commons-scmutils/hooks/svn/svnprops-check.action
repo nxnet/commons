@@ -1,0 +1,41 @@
+#!/bin/bash
+
+REPOS="$1"
+TXN="$2"
+
+# Exit on all errors.
+set -e
+SVNLOOK=svnlook
+echo "`$SVNLOOK changed -t "$TXN" "$REPOS"`" | while read REPOS_PATH
+do
+  if [[ $REPOS_PATH =~ A[[:blank:]]{3}(.*)\.(sh|c|h|cpp) ]]
+  then
+    if [ ${#BASH_REMATCH[*]} -ge 2 ]
+        then
+    FILENAME=${BASH_REMATCH[1]}.${BASH_REMATCH[2]};
+
+    # Make sure shell scripts are executable
+    if [[ sh == ${BASH_REMATCH[2]} ]]
+    then
+        EX_VALUE="true"
+            if [ -z "`$SVNLOOK propget -t \"$TXN\" \"$REPOS\" svn:executable \"$FILENAME\" 2> /dev/null`" ]
+            then
+            ERROR=1;
+                echo "svn ps svn:executable $EX_VALUE \"$FILENAME\"" >&2
+        fi
+        EOL_STYLE="LF"
+    else
+        EOL_STYLE="native"
+    fi
+
+    # Make sure every file has the right svn:eol-style property set
+        if [ $EOL_STYLE != "`$SVNLOOK propget -t \"$TXN\" \"$REPOS\" svn:eol-style \"$FILENAME\" 2> /dev/null`" ]
+        then
+        ERROR=1;
+            echo "svn ps svn:eol-style $EOL_STYLE \"$FILENAME\"" >&2
+    fi
+    fi
+  fi
+  test -z $ERROR || (echo "Please execute above commands to correct svn property settings." >& 2; exit 1)
+done
+

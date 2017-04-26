@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Command for SVN to GIT sync
+#
+################################
+
+#=================
+# Magic variables
+#=================
+declare __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+#=================
+# Include scripts
+#=================
+declare __LOCK_FILE="${__LOCK_FILE:-/tmp/git-svn-sync2}"
+source "${__dir}/git-svn-sync.sh"
+
+#=======================
+# Execute command logic
+#=======================
+synchronouslyPullBranchesFromGitAndPushToSvn "${@}"

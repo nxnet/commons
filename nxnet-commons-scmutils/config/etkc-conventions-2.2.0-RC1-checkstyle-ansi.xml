@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!-- Checkstyle-Configuration: AllmanANSI Description: none -->
+<module name="Checker">
+
+    <property name="severity" value="warning" />
+    
+    <!-- Checks that there are no tab characters in the file.
+    -->
+    <module name="FileTabCharacter">
+        <property name="severity" value="error" />
+        <property name="eachLine" value="true" />
+        <property name="fileExtensions" value="java,xml,properties,py" />
+    </module>
+    
+    <!-- Checks whether files end with a new line.
+    -->
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="error" />
+    </module>
+    
+    <!-- Requires a Ericsson copyright notice in each file.
+      Code intended to be open-sourced may have a multi-line copyright
+      notice, so that this required text appears on the second line:
+      <pre>
+        /*
+         * Copyright ETK 2014
+         *
+         * (details of open-source license...)
+      </pre>
+    -->
+    <module name="RegexpSingleline">
+        <property name="format"
+            value="^(//| \*) Copyright (\([cC]\) )? (ETK) [\d]{4}(\-[\d]{4})?.*$" />
+        <property name="minimum" value="1" />
+        <property name="maximum" value="10" />
+        <property name="message" value="Ericsson copyright is missing or malformed." />
+    </module>
+    
+    <!-- Checks that FIXME is not used in comments. TODO is preferred. 
+    -->
+    <module name="RegexpSingleline">
+        <property name="format" value="((//.*)|(\*.*))FIXME" />
+        <property name="message"
+            value='TODO is preferred to FIXME.  e.g. "TODO(johndoe): Refactor when v2 is released."' />
+    </module>
+
+    <!-- Checks that TODOs are named.  
+    -->
+    <module name="RegexpSingleline">
+        <property name="format" value="((//.*)|(\*.*))TODO\([a-z]{7}\)" />
+        <property name="message"
+            value='All TODOs should be named.  e.g. "TODO(johndoe): Refactor when v2 is released."' />
+    </module>
+
+    <!-- All Java AST specific tests live under TreeWalker module. 
+    -->
+    <module name="TreeWalker">
+        <module name="LeftCurly">
+            <property name="option" value="nl" />
+        </module>
+        <module name="RightCurly">
+            <property name="option" value="alone" />
+        </module>
+        <module name="JavadocType">
+            <property name="authorFormat" value="^[a-zA-Z][a-zA-Z0-9]*$" />
+            <property name="versionFormat" value="^[a-zA-Z][a-zA-Z0-9]*$" />
+        </module>
+        <module name="MissingDeprecated">
+        </module>
+        <module name="JavadocMethod">
+            <property name="suppressLoadErrors" value="true" />
+        </module>
+        <module name="JavadocStyle">
+        </module>
+        <module name="LocalVariableName">
+        </module>
+        <module name="LocalFinalVariableName">
+        </module>
+        <module name="ConstantName">
+            <property name="severity" value="warning" />
+        </module>
+        <module name="MemberName">
+        </module>
+        <module name="MethodName">
+        </module>
+        <module name="PackageName">
+        </module>
+        <module name="TypeName">
+        </module>
+        <module name="StaticVariableName">
+        </module>
+        <module name="ParameterName">
+        </module>
+        <module name="AbstractClassName">
+            <property name="severity" value="warning" />
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*Base$|^Abstract[A-Z][a-zA-Z0-9]*$" />
+        </module>
+        <module name="AvoidStarImport">
+            <property name="severity" value="error" />
+        </module>
+        <module name="AvoidStaticImport">
+            <property name="severity" value="error" />
+            <property name="excludes" value="org.junit.Assert.*,org.mockito.Mockito.*,org.mockito.Matchers.*,org.hamcrest.MatcherAssert.*,org.hamcrest.CoreMatchers.*"/>
+        </module>
+        <module name="ImportOrder">
+            <property name="severity" value="error" />
+            <property name="groups" value="java,javax,org,com,net,hr" />
+            <property name="separated" value="true" />
+        </module>
+        <module name="RedundantImport">
+            <property name="severity" value="error" />
+        </module>
+        <module name="UnusedImports">
+            <property name="severity" value="error" />
+        </module>
+        <module name="LineLength">
+            <property name="max" value="120" />
+            <property name="tabWidth" value="4" />
+        </module>
+        <module name="MethodParamPad">
+        </module>
+        <module name="GenericWhitespace">
+        </module>
+        <module name="EmptyForInitializerPad">
+            <property name="option" value="space" />
+        </module>
+        <module name="EmptyForIteratorPad">
+            <property name="option" value="space" />
+        </module>
+        <module name="WhitespaceAround">
+        </module>
+        <module name="NoWhitespaceAfter">
+        </module>
+        <module name="NoWhitespaceBefore">
+            <property name="tokens" value="SEMI,DOT,POST_DEC,POST_INC" />
+        </module>
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="COMMA,SEMI" />
+        </module>
+        <module name="OperatorWrap">
+        </module>
+        <module name="TypecastParenPad">
+            <property name="tokens" value="RPAREN,TYPECAST" />
+        </module>
+        <module name="ModifierOrder">
+        </module>
+        <module name="EmptyBlock">
+        </module>
+        <module name="NeedBraces">
+        </module>
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true" />
+        </module>
+        <module name="CovariantEquals">
+        </module>
+        <module name="EmptyStatement">
+        </module>
+        <module name="EqualsAvoidNull">
+        </module>
+        <module name="EqualsHashCode">
+        </module>
+        <module name="DefaultComesLast">
+        </module>
+        <module name="FallThrough">
+        </module>
+        <module name="FinalLocalVariable">
+        </module>
+        <module name="HiddenField">
+        </module>
+        <module name="IllegalCatch">
+        </module>
+        <module name="IllegalThrows">
+        </module>
+        <module name="InnerAssignment">
+        </module>
+        <module name="MagicNumber">
+        </module>
+        <module name="MissingCtor">
+        </module>
+        <module name="MissingSwitchDefault">
+        </module>
+        <module name="MultipleStringLiterals">
+        </module>
+        <module name="PackageDeclaration">
+        </module>
+        <module name="SuperClone">
+        </module>
+        <module name="SuperFinalize">
+        </module>
+        <module name="OneStatementPerLine">
+        </module>
+        <module name="Indentation">
+        </module>
+        <module name="TodoComment">
+            <property name="severity" value="warning" />
+            <property name="format" value="TODO" />
+        </module>
+        <module name="OuterTypeFilename">
+        </module>
+    </module>
+</module>

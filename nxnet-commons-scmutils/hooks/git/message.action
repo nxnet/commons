@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Add issue tracking system's issue identifier
+# to the begining of the commit message template
+#
+####################################################
+
+#========================#
+# Script args definition
+#========================#
+
+declare msgfile="${1:?message file arg missing}"
+declare msgsrc="${2:-unknown}"
+
+#===========================#
+# Derived script parameters
+#===========================#
+declare branch_name=$(git symbolic-ref -q --short HEAD)
+declare issue_id=$(basename "${branch_name}") # Extract last folder from branch path name and use it as issue id
+
+#==============#
+# Execute sync
+#==============#
+
+# Verify extracted issue id
+if ! [[ "${issue_id}" =~ ^(.*\-)?([a-zA-Z]{3,4}\-[0-9]+)$ ]]; then
+   issue_id="GSB-1"
+else
+   issue_id=$(echo "${BASH_REMATCH[2]}" | tr [a-z] [A-Z])
+fi
+
+# Change commit message template
+if [ x != x${issue_id} ]; then
+   sed -i.back "1s/^/[${issue_id}] - /" "${msgfile}"
+fi
+

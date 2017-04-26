@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Extract project name(s) from commited changes
+#
+
+declare repository="${1:?Svn repository argument not set}"
+declare revision="${2:?Revision number argument not set}"
+
+svnlook changed -r ${revision} ${repository} | awk '{ print $2 }' | sort | uniq

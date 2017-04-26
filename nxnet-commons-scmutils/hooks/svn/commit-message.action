@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Check SVN commit message
+#
+
+# Script args definition
+declare __svn_repository="${1:?Svn repository argument undefined}"
+declare __svn_revision="${2:?Svn revision argument undefined}"
+
+# Make sure that the log message conforms to syntax format
+svnlook log -t "${__svn_revision}" "${__svn_repository}" | grep -E "^\[[A-Z0-9]{3,5}\-[1-9][0-9]{0,3}\][ ]\-[ ].*" > /dev/null
+if [ $? == 1 ]
+then
+        echo "===================" >&2
+        echo "Invalid Log Message" >&2
+        echo "===================" >&2
+        echo "> Can not commit without log message!" >&2
+        echo "> Log message syntax must match following regular expression: \[[A-Z0-9]{3,5}\-[1-9][0-9]{0,3}\][ ]\-[ ].* " >&2
+        echo "> Example: [MDM-15] - My log message." >&2
+        exit 1
+fi
