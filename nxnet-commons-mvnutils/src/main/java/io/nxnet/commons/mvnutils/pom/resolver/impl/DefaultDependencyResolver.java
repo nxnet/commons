@@ -59,26 +59,26 @@ public class DefaultDependencyResolver implements DependencyResolver
         Artifact artifact = new DefaultArtifact(artifactCoordinates);
 
         // Artifact descriptor
-        ArtifactDescriptorRequest descriptorRequest = new ArtifactDescriptorRequest();
-        descriptorRequest.setArtifact(artifact);
-        descriptorRequest.setRepositories(remoteRepositories);
-        ArtifactDescriptorResult descriptorResult = null;
-        try
-        {
-            descriptorResult = system.readArtifactDescriptor( session, descriptorRequest );
-        }
-        catch (ArtifactDescriptorException e)
-        {
-            throw new DependencyException("Error resolving artifact descriptor", e);
-        }
+//        ArtifactDescriptorRequest descriptorRequest = new ArtifactDescriptorRequest();
+//        descriptorRequest.setArtifact(artifact);
+//        descriptorRequest.setRepositories(remoteRepositories);
+//        ArtifactDescriptorResult descriptorResult = null;
+//        try
+//        {
+//            descriptorResult = system.readArtifactDescriptor( session, descriptorRequest );
+//        }
+//        catch (ArtifactDescriptorException e)
+//        {
+//            throw new DependencyException("Error resolving artifact descriptor", e);
+//        }
 
         CollectRequest collectRequest = new CollectRequest();
-        //collectRequest.setRoot(new org.eclipse.aether.graph.Dependency(artifact, ""));
-        //collectRequest.setRepositories(this.repositoryContext.getRemoteRepositories());
-        collectRequest.setRootArtifact( descriptorResult.getArtifact() );
-        collectRequest.setDependencies( descriptorResult.getDependencies() );
-        collectRequest.setManagedDependencies( descriptorResult.getManagedDependencies() );
-        collectRequest.setRepositories( descriptorRequest.getRepositories() );
+        collectRequest.setRoot(new org.eclipse.aether.graph.Dependency(artifact, ""));
+        collectRequest.setRepositories(remoteRepositories);
+//        collectRequest.setRoot( descriptorResult.getArtifact() );
+//        collectRequest.setDependencies( descriptorResult.getDependencies() );
+//        collectRequest.setManagedDependencies( descriptorResult.getManagedDependencies() );
+//        collectRequest.setRepositories( descriptorRequest.getRepositories() );
 
         CollectResult collectResult = null;
         try
