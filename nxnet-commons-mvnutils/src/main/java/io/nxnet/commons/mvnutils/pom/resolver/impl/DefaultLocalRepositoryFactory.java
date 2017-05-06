@@ -8,12 +8,18 @@ import io.nxnet.commons.mvnutils.pom.resolver.ServiceRegistry;
 public class DefaultLocalRepositoryFactory implements LocalRepositoryFactory
 {
     private String localRepoPath;
-    
+
     public DefaultLocalRepositoryFactory()
     {
-        this.localRepoPath = System.getProperty("java.io.tmpdir") + "/.m2/repository";
+        this(System.getProperty("java.io.tmpdir") 
+                + "/nxnet/commons/mvnutils/repository-" + System.currentTimeMillis());
     }
-    
+
+    public DefaultLocalRepositoryFactory(String localRepoPath)
+    {
+        this.localRepoPath = localRepoPath;
+    }
+
     public LocalRepository getLocalRepository()
     {
         return new LocalRepository(this.localRepoPath);
