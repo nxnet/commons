@@ -4,7 +4,7 @@
     
     <groupId>io.nxnet.commons</groupId>
     <artifactId>nxnet-commons</artifactId>
-    <version>0.1.0-RC16</version>
+    <version>0.1.0-RC17-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>nxnet commons</name>
     <description>Commons utilities for Java projects</description>
